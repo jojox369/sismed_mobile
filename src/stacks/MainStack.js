@@ -1,8 +1,8 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import Preload from '../Preload';
-import SignIn from '../SignIn';
-import ForgotPassword from '../ForgotPassword';
+import Preload from '../screens/Preload';
+import SignIn from '../screens/SignIn';
+import ForgotPassword from '../screens/ForgotPassword';
 
 const Stack = createStackNavigator();
 
