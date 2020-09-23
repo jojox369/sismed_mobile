@@ -59,7 +59,7 @@ export const SignInput = ({ IconSvg, placeholder, keyboardType, value, onChangeT
           keyboardType={keyboardType}
           value={value}
           onChangeText={onChangeText}
-          secureTextEntry={password}
+
 
         />
       </InputArea>

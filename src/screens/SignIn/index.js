@@ -1,33 +1,30 @@
-import React, { useContext, useState } from 'react';
-import { UserContext } from '../../contexts/UserContext';
-import { useNavigation } from '@react-navigation/native';
-import Api from '../../Api';
+import React, {useContext, useState} from 'react';
+import {UserContext} from '../../contexts/UserContext';
+import {useNavigation} from '@react-navigation/native';
+import Api from '../../services/Api';
 import AsyncStorage from '@react-native-community/async-storage';
-import { cpfMask, unmaskCPF } from '../../components/Mask';
+import {cpfMask, unmaskCPF} from '../../components/Mask';
 import {
   Container,
   InputArea,
   CustomButtom,
   CustomButtomText,
   ForgotPasswordButton,
-  ForgotPasswordButtonText
+  ForgotPasswordButtonText,
 } from './styles';
-import { SignInput } from '../../components/SignInput'
+import {SignInput} from '../../components/SignInput';
 import SismedIcon from '../../assets/sismed.svg';
 import UserIcon from '../../assets/user.svg';
 import LockIcon from '../../assets/lock.svg';
 import ShowPasswordIcon from '../../assets/showPassword.svg';
 
-
 export default () => {
-  const { dispatch: userDispatch } = useContext(UserContext);
+  const {dispatch: userDispatch} = useContext(UserContext);
 
   const navigation = useNavigation();
 
-
   const [cpfField, setCPFField] = useState('');
   const [passwordField, setPasswordField] = useState('');
-
 
   const handleSignClick = async () => {
     if (cpfField != '' && passwordField != '') {
@@ -41,58 +38,51 @@ export default () => {
           userDispatch({
             type: 'setId',
             payload: {
-              id: user.id
-            }
+              id: user.id,
+            },
           });
 
           userDispatch({
             type: 'setNome',
             payload: {
-              id: user.nome
-            }
+              nome: user.nome,
+            },
           });
 
           userDispatch({
             type: 'setCPF',
             payload: {
-              id: user.cpf
-            }
+              cpf: user.cpf,
+            },
           });
 
           userDispatch({
             type: 'setPerfil',
             payload: {
-              id: user.perfil
-            }
+              perfil: user.perfil,
+            },
           });
 
-
           navigation.reset({
-            routes: [{ name: 'MainTab' }]
-          })
+            routes: [{name: 'MainTab'}],
+          });
         }
       } else {
-        console.log('login e senha errados')
+        console.log('login e senha errados');
       }
-
-
     } else {
       alert('Preencha os campos!');
     }
-  }
+  };
 
   const handleMessaButtonClick = () => {
     navigation.reset({
-      routes: [{ name: 'ForgotPassword' }]
-    })
-  }
-
-
+      routes: [{name: 'ForgotPassword'}],
+    });
+  };
 
   return (
-
     <Container>
-
       <SismedIcon width="100%" height="160" />
 
       <InputArea>
@@ -100,23 +90,21 @@ export default () => {
           IconSvg={UserIcon}
           placeholder="Digite seu CPF"
           value={cpfField}
-          onChangeText={t => setCPFField(cpfMask(t))}
-          keyboardType='numeric'
+          onChangeText={(t) => setCPFField(cpfMask(t))}
+          keyboardType="numeric"
         />
         <SignInput
           IconSvg={LockIcon}
           placeholder="Digite sua Senha"
           value={passwordField}
-          onChangeText={t => setPasswordField(t)}
+          onChangeText={(t) => setPasswordField(t)}
           password={true}
 
-        // colocar icone para revelar a senha
+          // colocar icone para revelar a senha
         />
 
         <CustomButtom onPress={handleSignClick}>
-          <CustomButtomText>
-            LOGIN
-          </CustomButtomText>
+          <CustomButtomText>LOGIN</CustomButtomText>
         </CustomButtom>
       </InputArea>
 
