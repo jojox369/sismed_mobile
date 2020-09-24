@@ -47,7 +47,7 @@ export default ({state, navigation}) => {
         />
       </TabItem>
 
-      <TabItem onPress={() => goTo('Paciente')}>
+      <TabItem onPress={() => goTo('Patient')}>
         <PersonIcon
           style={{opacity: state.index === 1 ? 1 : 0.5}}
           width="24"
@@ -56,11 +56,11 @@ export default ({state, navigation}) => {
         />
       </TabItem>
 
-      <TabItemCenter onPress={() => goTo('Agenda')}>
+      <TabItemCenter onPress={() => goTo('Schedule')}>
         <TodayIcon width="32" height="32" fill="#367A9D" />
       </TabItemCenter>
 
-      <TabItem onPress={() => goTo('Exame')}>
+      <TabItem onPress={() => goTo('Exam')}>
         <ExamIcon
           style={{opacity: state.index === 3 ? 1 : 0.5}}
           width="24"

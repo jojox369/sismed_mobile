@@ -6,7 +6,7 @@ import {UserContext} from '../../contexts/UserContext';
 import {cpfMask, unmaskCPF} from '../../assets/functions';
 import {SignInput} from '../../components/SignInput';
 import LoadingComponent from '../../components/Loading';
-import Api from '../../services/Api';
+import Api from '../../services/login';
 
 import SismedIcon from '../../assets/icons/sismed.svg';
 import UserIcon from '../../assets/icons/user.svg';
