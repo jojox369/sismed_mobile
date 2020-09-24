@@ -7,6 +7,10 @@ import {useNavigation} from '@react-navigation/native';
 export default () => {
   const navigation = useNavigation();
 
+  useEffect(() => {
+    AsyncStorage.removeItem('token');
+  });
+
   return (
     <Container>
       <Text>Profile Page</Text>

@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Container, LoadingIcon} from './styles';
+import LoadingComponent from '../../components/Loading';
 import AsyncStorage from '@react-native-community/async-storage';
 import {useNavigation} from '@react-navigation/native';
 
@@ -22,9 +22,5 @@ export default () => {
     checkToken();
   });
 
-  return (
-    <Container>
-      <LoadingIcon size="large" color="#FFF" />
-    </Container>
-  );
+  return <LoadingComponent />;
 };

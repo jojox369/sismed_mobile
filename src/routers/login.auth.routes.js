@@ -3,7 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Preload from '../screens/Preload';
 import SignIn from '../screens/SignIn';
 import ForgotPassword from '../screens/ForgotPassword';
-import MainTab from './MainTab';
+import MainTab from './main.routes';
 const Stack = createStackNavigator();
 
 export default () => (

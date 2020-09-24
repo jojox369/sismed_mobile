@@ -1,24 +1,13 @@
-export const initialState = {
-  nome: '',
-  cpf: '',
-  perfil: 0,
-  id: 0,
-};
-
 export const UserReducer = (state, action) => {
   switch (action.type) {
-    case 'setId':
-      return {...state, id: action.payload.id};
-      break;
-    case 'setNome':
-      return {...state, nome: action.payload.nome};
-      break;
-    case 'setCPF':
-      return {...state, cpf: action.payload.cpf};
-      break;
-
-    case 'setPerfil':
-      return {...state, perfil: action.payload.perfil};
+    case 'setUser':
+      return {
+        ...state,
+        id: action.payload.user.id,
+        perfil: action.payload.user.perfil,
+        nome: action.payload.user.nome,
+        cpf: action.payload.user.id,
+      };
       break;
     default:
       return state;
