@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 import {CardColor, TabBarColor, ButtonColor} from '../assets/styles';
 import {Cell, CPF} from '../pipes/pipes';
+
 const Area = styled.TouchableOpacity`
   background-color: ${CardColor};
   margin-bottom: 20px;
@@ -13,15 +14,15 @@ const Area = styled.TouchableOpacity`
 `;
 
 const NameText = styled.Text`
-  font-size: 17px;
+  font-size: 15px;
   font-weight: bold;
 `;
 const CellText = styled.Text`
-  font-size: 17px;
+  font-size: 13px;
   margin-top: 10px;
 `;
 const CpfText = styled.Text`
-  font-size: 17px;
+  font-size: 13px;
   margin-top: 10px;
 `;
 
@@ -41,8 +42,11 @@ const SeeDetailsText = styled.Text`
 `;
 
 export default ({data}) => {
+  const handleClick = () => {
+    console.log(data.id);
+  };
   return (
-    <Area>
+    <Area onPress={handleClick}>
       <NameText>{data.nome}</NameText>
       <CellText>{Cell(data.celular)}</CellText>
       <CpfText>{CPF(data.cpf)}</CpfText>

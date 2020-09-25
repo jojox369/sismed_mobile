@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {RefreshControl, Text} from 'react-native';
 import {
   Container,
   Scroller,
@@ -8,21 +9,43 @@ import {
   SearchArea,
   SearchInput,
   ListArea,
+  NotFoundDataArea,
+  RefreshScreenButton,
+  RefreshScreenButtonText,
 } from './styles';
 import SearchIcon from '../../../assets/icons/search.svg';
 import {SearchIconColor} from '../../../assets/styles';
 import LoadingComponent from '../../../components/Loading';
-import Card from '../../../components/PatienteCard';
+import Card from '../../../components/PatientCard';
+import EmptyDataCard from '../../../components/EmptyDataCard';
 
 import Api from '../../../services/patient';
 
 export default () => {
-  const [searchText, setSearchText] = useState();
+  const [searchText, setSearchText] = useState('');
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [emptyData, setEmptyData] = useState(false);
+  const [patient, setPatient] = useState('');
 
-  const search = () => {
-    console.log('aqui');
+  const search = async () => {
+    setLoading(true);
+    let response = await Api.getByProntuario(searchText);
+
+    if (response != 'error') {
+      if (Object.keys(response).length === 0) {
+        setLoading(false);
+        setEmptyData(true);
+        setList(response);
+      } else {
+        setLoading(false);
+        setList(response);
+      }
+    } else {
+      alert('Erro ao tentar recuperar dados');
+      setLoading(false);
+    }
   };
 
   const getData = async () => {
@@ -37,13 +60,24 @@ export default () => {
     }
   };
 
+  const onRefresh = () => {
+    setRefreshing(false);
+    getData();
+  };
+
+  const openDetailsScreen = () => {
+    console.log(patient);
+  };
   useEffect(() => {
     getData();
   }, []);
 
   return (
     <Container>
-      <Scroller>
+      <Scroller
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <HeaderArea>
           <HeaderTitle>Pacientes</HeaderTitle>
         </HeaderArea>
@@ -52,7 +86,9 @@ export default () => {
             placeholder="Digite o prontuario do paciente"
             placeholderTextColor="#000000"
             value={searchText}
-            onChangeText={(t) => setSearchText(t)}
+            onChangeText={(t) => {
+              setSearchText(t);
+            }}
             keyboardType="numeric"
           />
           <SearchButton onPress={search}>
@@ -60,14 +96,26 @@ export default () => {
           </SearchButton>
         </SearchArea>
 
-        {loading && <LoadingComponent />}
+        {loading && <LoadingComponent MarginTop="90" />}
 
-        <ListArea>
-          {list.map((item, k) => (
-            <Card key={k} data={item} />
-          ))}
-        </ListArea>
+        {!loading && (
+          <EmptyDataCard
+            message="Nenhum paciente encontrado"
+            subMessage="Arraste para baixo para baixo para listar os pacientes"
+          />
+        )}
       </Scroller>
     </Container>
   );
 };
+
+/**
+ * 
+ * <ListArea>
+          {list.map((item, k) => (
+            <Card key={k} data={item} />
+          ))}
+        </ListArea>
+ * 
+ * 
+ */

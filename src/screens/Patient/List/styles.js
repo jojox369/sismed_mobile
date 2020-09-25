@@ -42,7 +42,6 @@ export const SearchArea = styled.View`
 export const SearchInput = styled.TextInput`
   flex: 1;
   font-size: 16px;
-  color: ${SearchInputColor};
 `;
 
 export const SearchButton = styled.TouchableOpacity`
