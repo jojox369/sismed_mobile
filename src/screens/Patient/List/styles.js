@@ -4,7 +4,6 @@ import {
   ScreenColor,
   HeaderTitleColor,
   SearchBoxColor,
-  SearchInputColor,
 } from '../../../assets/styles';
 export const Container = styled.SafeAreaView`
   flex: 1;

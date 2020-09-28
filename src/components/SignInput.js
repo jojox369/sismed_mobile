@@ -1,15 +1,13 @@
 import React, {useState} from 'react';
 import styled from 'styled-components/native';
-import TextInputMask from 'react-native-text-input-mask';
-import UserIcon from '../assets/icons/user.svg';
+import {InputColor} from '../assets/styles';
 import ShowPasswordIcon from '../assets/icons/showPassword.svg';
-import {View, TouchableHighlight} from 'react-native';
 
 /* Area do campo */
 const InputArea = styled.View`
   width: 100%;
   height: 60px;
-  background-color: #fff;
+  background-color: ${InputColor};
   flex-direction: row;
   border-radius: 30px;
   padding-left: 15px;

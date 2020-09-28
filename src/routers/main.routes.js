@@ -1,5 +1,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+
 import Home from '../screens/Home';
 import Schedule from '../screens/Schedule/List';
 import Patient from '../screens/Patient/List';
@@ -7,6 +8,8 @@ import ClinicalRecord from '../screens/ClinicalRecord/List';
 import Exam from '../screens/Exam/List';
 import Profile from '../screens/Profile';
 import CustomTabBar from '../components/CustomTabBar';
+
+import PatientDetails from '../screens/Patient/Details';
 
 const Tab = createBottomTabNavigator();
 
@@ -18,5 +21,6 @@ export default () => (
     <Tab.Screen name="Exam" component={Exam} />
     <Tab.Screen name="Profile" component={Profile} />
     <Tab.Screen name="ClinicalRecord" component={ClinicalRecord} />
+    <Tab.Screen name="PatientDetails" component={PatientDetails} />
   </Tab.Navigator>
 );

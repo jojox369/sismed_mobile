@@ -11,7 +11,6 @@ import Api from '../../services/login';
 import SismedIcon from '../../assets/icons/sismed.svg';
 import UserIcon from '../../assets/icons/user.svg';
 import LockIcon from '../../assets/icons/lock.svg';
-import ShowPasswordIcon from '../../assets/icons/showPassword.svg';
 
 import {
   Container,

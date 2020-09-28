@@ -41,12 +41,9 @@ const SeeDetailsText = styled.Text`
   color: ${ButtonColor};
 `;
 
-export default ({data}) => {
-  const handleClick = () => {
-    console.log(data.id);
-  };
+export default ({data, onPress}) => {
   return (
-    <Area onPress={handleClick}>
+    <Area onPress={onPress}>
       <NameText>{data.nome}</NameText>
       <CellText>{Cell(data.celular)}</CellText>
       <CpfText>{CPF(data.cpf)}</CpfText>

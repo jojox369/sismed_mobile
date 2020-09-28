@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {RefreshControl, Text} from 'react-native';
+import {RefreshControl} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+
 import {
   Container,
   Scroller,
@@ -9,9 +11,6 @@ import {
   SearchArea,
   SearchInput,
   ListArea,
-  NotFoundDataArea,
-  RefreshScreenButton,
-  RefreshScreenButtonText,
 } from './styles';
 import SearchIcon from '../../../assets/icons/search.svg';
 import {SearchIconColor} from '../../../assets/styles';
@@ -22,15 +21,19 @@ import EmptyDataCard from '../../../components/EmptyDataCard';
 import Api from '../../../services/patient';
 
 export default () => {
+  const navigation = useNavigation();
+
   const [searchText, setSearchText] = useState('');
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [emptyData, setEmptyData] = useState(false);
-  const [patient, setPatient] = useState('');
 
   const search = async () => {
     setLoading(true);
+    if (emptyData) {
+      setEmptyData(false);
+    }
     let response = await Api.getByProntuario(searchText);
 
     if (response != 'error') {
@@ -53,8 +56,9 @@ export default () => {
     let response = await Api.getAll();
 
     if (response != 'error') {
-      setList(response);
       setLoading(false);
+
+      setList(response);
     } else {
       alert('Erro ao tentar recuperar dados');
     }
@@ -65,57 +69,60 @@ export default () => {
     getData();
   };
 
-  const openDetailsScreen = () => {
-    console.log(patient);
-  };
   useEffect(() => {
     getData();
   }, []);
 
+  function handleClick(id) {
+    navigation.navigate('PatientDetails', {id});
+  }
+
   return (
     <Container>
-      <Scroller
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
-        <HeaderArea>
-          <HeaderTitle>Pacientes</HeaderTitle>
-        </HeaderArea>
-        <SearchArea>
-          <SearchInput
-            placeholder="Digite o prontuario do paciente"
-            placeholderTextColor="#000000"
-            value={searchText}
-            onChangeText={(t) => {
-              setSearchText(t);
-            }}
-            keyboardType="numeric"
-          />
-          <SearchButton onPress={search}>
-            <SearchIcon with="24" height="24" fill={SearchIconColor} />
-          </SearchButton>
-        </SearchArea>
+      {!loading && (
+        <Scroller
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
+          <HeaderArea>
+            <HeaderTitle>Pacientes</HeaderTitle>
+          </HeaderArea>
+          <SearchArea>
+            <SearchInput
+              placeholder="Digite o prontuario do paciente"
+              placeholderTextColor="#000000"
+              value={searchText}
+              onChangeText={(t) => {
+                setSearchText(t);
+              }}
+              keyboardType="numeric"
+            />
+            <SearchButton onPress={search}>
+              <SearchIcon with="24" height="24" fill={SearchIconColor} />
+            </SearchButton>
+          </SearchArea>
 
-        {loading && <LoadingComponent MarginTop="90" />}
+          {emptyData && (
+            <EmptyDataCard
+              message="Nenhum paciente encontrado"
+              subMessage="Arraste para baixo para baixo para listar os pacientes"
+            />
+          )}
 
-        {!loading && (
-          <EmptyDataCard
-            message="Nenhum paciente encontrado"
-            subMessage="Arraste para baixo para baixo para listar os pacientes"
-          />
-        )}
-      </Scroller>
+          {!loading && (
+            <ListArea>
+              {list.map((item, k) => (
+                <Card
+                  key={k}
+                  data={item}
+                  onPress={() => handleClick(item.id)}
+                />
+              ))}
+            </ListArea>
+          )}
+        </Scroller>
+      )}
+      {loading && <LoadingComponent />}
     </Container>
   );
 };
-
-/**
- * 
- * <ListArea>
-          {list.map((item, k) => (
-            <Card key={k} data={item} />
-          ))}
-        </ListArea>
- * 
- * 
- */

@@ -17,3 +17,5 @@ export const SearchBoxColor = '#FFFFFF';
 export const SearchInputColor = '#FFFFFF';
 
 export const CardColor = '#FFFFFF';
+
+export const InputColor = '#FFFFFF';

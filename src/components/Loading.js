@@ -13,8 +13,8 @@ const LoadingIcon = styled.ActivityIndicator`
   margin-top: 50px;
 `;
 
-export default ({MaginTop}) => (
-  <Container style={{marginTop: MaginTop}}>
+export default () => (
+  <Container>
     <LoadingIcon size="large" color={LoadingIconColor} />
   </Container>
 );

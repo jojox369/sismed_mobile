@@ -13,6 +13,7 @@ export default {
         'Content-Type': 'application/json',
       },
     });
+
     if (req.status == 200) {
       return await req.json();
     } else {
@@ -22,8 +23,24 @@ export default {
 
   getByProntuario: async (prontuario) => {
     const token = await AsyncStorage.getItem('token');
-
     const req = await fetch(`${BASE_API}pacientes/prontuario/${prontuario}`, {
+      method: 'GET',
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (req.status == 200) {
+      return await req.json();
+    } else {
+      return 'error';
+    }
+  },
+
+  getById: async (id) => {
+    const token = await AsyncStorage.getItem('token');
+    const req = await fetch(`${BASE_API}pacientes/${id}`, {
       method: 'GET',
       headers: {
         Authorization: token,

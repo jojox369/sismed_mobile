@@ -20,3 +20,8 @@ export const CNPJ = (value) => {
 export const RG = (value) => {
   return value.replace(/(\d{2})(\d{3})(\d{3})(\d{1})/g, '$1.$2.$3-$4');
 };
+
+export const Birthday = (value) => {
+  const birthday = value.split('-');
+  return birthday[2] + '/' + birthday[1] + '/' + birthday[0];
+};

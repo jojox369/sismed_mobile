@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import {ScreenColor, ButtonColor, ButtonTextColor} from '../../assets/styles';
+
 export const Container = styled.SafeAreaView`
   background-color: ${ScreenColor};
   flex: 1;
@@ -14,7 +15,7 @@ export const InputArea = styled.View`
 `;
 
 export const CustomButtom = styled.TouchableOpacity`
-  height: 60px
+  height: 60px;
   background-color: ${ButtonColor};
   border-radius: 30px;
   justify-content: center;
