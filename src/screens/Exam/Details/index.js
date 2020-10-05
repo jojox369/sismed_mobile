@@ -1,5 +1,6 @@
 import React from 'react';
-
-export default () => {
-  return <Text>Clinical Record Details</Text>;
+import {Text} from 'react-native';
+export default ({route}) => {
+  const {id} = route.params;
+  return <Text>Exam Details {id}</Text>;
 };

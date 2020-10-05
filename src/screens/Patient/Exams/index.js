@@ -1,36 +1,59 @@
 import React, {useEffect, useState} from 'react';
-import {RefreshControl} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-
 import {
   Container,
   Scroller,
-  HeaderArea,
-  SearchButton,
-  HeaderTitle,
   SearchArea,
+  SearchButton,
   SearchInput,
   ListArea,
 } from './styles';
+
+import Api from '../../../services/exam';
+
 import SearchIcon from '../../../assets/icons/search.svg';
 import {SearchIconColor} from '../../../assets/styles';
-import LoadingComponent from '../../../components/Loading';
-import Card from '../../../components/PatientCard';
+
 import EmptyDataCard from '../../../components/EmptyDataCard';
+import Card from '../../../components/ExamCard';
+import LoadingComponent from '../../../components/Loading';
 
-import Api from '../../../services/patient';
+import {SearchDateFormater} from '../../../pipes/pipes';
 
-export default () => {
+export default ({route}) => {
   const navigation = useNavigation();
-
+  //const {name} = route.params;
+  const [loading, setloading] = useState(false);
   const [searchText, setSearchText] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [list, setList] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [emptyData, setEmptyData] = useState(false);
+  const [list, setList] = useState([]);
+
+  const getData = async () => {
+    setloading(true);
+    let response = await Api.getByPatient('DANILO');
+    if (response != 'error') {
+      if (Object.keys(response).length === 0) {
+        setloading(false);
+        setEmptyData(true);
+      } else {
+        setloading(false);
+        setList(response);
+      }
+    } else {
+      setloading(false);
+      alert('Erro ao carregar as informações');
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const changeText = (t) => {};
 
   const search = async () => {
-    setLoading(true);
+    /*setLoading(true);
     if (emptyData) {
       setEmptyData(false);
     }
@@ -48,64 +71,32 @@ export default () => {
     } else {
       alert('Erro ao tentar recuperar dados');
       setLoading(false);
-    }
+    }*/
   };
-
-  const getData = async () => {
-    setLoading(true);
-    let response = await Api.getAll();
-
-    if (response != 'error') {
-      setLoading(false);
-
-      setList(response);
-    } else {
-      alert('Erro ao tentar recuperar dados');
-    }
-  };
-
-  const onRefresh = () => {
-    setRefreshing(false);
-    getData();
-    setSearchText();
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   function handleClick(id) {
-    navigation.navigate('PatientDetails', {id});
+    navigation.navigate('ExamDetails', {id});
   }
 
   return (
     <Container>
       {!loading && (
-        <Scroller
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }>
-          <HeaderArea>
-            <HeaderTitle>Pacientes</HeaderTitle>
-          </HeaderArea>
+        <Scroller>
           <SearchArea>
             <SearchInput
-              placeholder="Digite o prontuario do paciente"
+              placeholder="Digite a data de coleta"
               placeholderTextColor="#000000"
               value={searchText}
-              onChangeText={(t) => {
-                setSearchText(t);
-              }}
-              keyboardType="numeric"
+              onChangeText={(t) => setSearchText(SearchDateFormater(t))}
+              keyboardType="number-pad"
             />
             <SearchButton onPress={search}>
               <SearchIcon with="24" height="24" fill={SearchIconColor} />
             </SearchButton>
           </SearchArea>
-
           {emptyData && (
             <EmptyDataCard
-              message="Nenhum paciente encontrado"
+              message="Nenhum exame encontrado"
               subMessage="Arraste para baixo para baixo para atualizar a tela"
             />
           )}

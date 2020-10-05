@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import {ScreenColor} from '../../../assets/styles';
+import {ScreenColor, ButtonColor} from '../../../assets/styles';
 
 export const Scroller = styled.ScrollView`
   flex: 1;
@@ -42,4 +42,36 @@ export const DetailsArea = styled.View`
 
 export const FieldArea = styled.View`
   padding-top: 20px;
+`;
+
+export const ButtonsArea = styled.View`
+  width: 100%;
+  margin-bottom: 25px;
+  margin-top: 25px;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 50px;
+`;
+
+export const ExamsButton = styled.TouchableOpacity`
+  width: 49%;
+  border: 1px solid ${ButtonColor};
+  border-radius: 20px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const ClinicalRecordButton = styled.TouchableOpacity`
+  width: 49%;
+  border: 1px solid ${ButtonColor};
+  border-radius: 20px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const ButtonsText = styled.Text`
+  font-size: 13px;
+  font-weight: bold;
 `;

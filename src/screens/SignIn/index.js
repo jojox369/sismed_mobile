@@ -3,7 +3,7 @@ import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {UserContext} from '../../contexts/UserContext';
 
-import {cpfMask, unmaskCPF} from '../../assets/functions';
+import {CPF, unmaskCPF} from '../../pipes/pipes';
 import {SignInput} from '../../components/SignInput';
 import LoadingComponent from '../../components/Loading';
 import Api from '../../services/login';
@@ -78,7 +78,7 @@ export default () => {
             IconSvg={UserIcon}
             placeholder="Digite seu CPF"
             value={cpfField}
-            onChangeText={(t) => setCPFField(cpfMask(t))}
+            onChangeText={(t) => setCPFField(CPF(t))}
             keyboardType="numeric"
           />
           <SignInput

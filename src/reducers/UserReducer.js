@@ -6,7 +6,7 @@ export const UserReducer = (state, action) => {
         id: action.payload.user.id,
         perfil: action.payload.user.perfil,
         nome: action.payload.user.nome,
-        cpf: action.payload.user.id,
+        cpf: action.payload.user.cpf,
       };
       break;
     default:
