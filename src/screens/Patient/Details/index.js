@@ -56,8 +56,8 @@ export default ({route}) => {
   }, []);
   return (
     <Container>
-      <Scroller>
-        {!loading && (
+      {!loading && (
+        <Scroller>
           <HeaderArea>
             <IconArea>
               <UserIcon width="100" height="100" fill="#000000" />
@@ -65,9 +65,7 @@ export default ({route}) => {
 
             <PatientName>{patient.nome}</PatientName>
           </HeaderArea>
-        )}
 
-        {!loading && (
           <DetailsArea>
             <FieldArea>
               <LabelComponent label="Prontuario" />
@@ -106,8 +104,8 @@ export default ({route}) => {
               </ClinicalRecordButton>
             </ButtonsArea>
           </DetailsArea>
-        )}
-      </Scroller>
+        </Scroller>
+      )}
       {loading && <LoadingComponent />}
     </Container>
   );

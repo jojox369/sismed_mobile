@@ -2,7 +2,7 @@ export const Cell = (value) => {
   return value.replace(/(\d{2})(\d{1})(\d{4})(\d{4})/g, '($1) $2 $3-$4');
 };
 
-export const Telefone = (value) => {
+export const Phone = (value) => {
   return value.replace(/(\d{2})(\d{4})(\d{4})/g, '($1) $2-$3');
 };
 
@@ -32,11 +32,11 @@ export const RG = (value) => {
 };
 
 export const BrazilianDate = (value) => {
-  const date = value.split('-');
+  const date = value.toString().split('-');
   return date[2] + '/' + date[1] + '/' + date[0];
 };
 
-export const SearchDateFormater = (value) => {
+export const SearchDateFormatter = (value) => {
   return value
     .replace(/\D/g, '') // substitui qualquer caracter que nao seja numero por nada
     .replace(/(\d{2})(\d)/, '$1/$2') // captura 2 grupos de numero o primeiro de 3 e o segundo de 1, apos capturar o primeiro grupo ele adiciona um ponto antes do segundo grupo de numero

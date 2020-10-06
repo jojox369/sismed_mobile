@@ -1,13 +1,13 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import Exam from '../screens/Exam/List';
-import ExamDetails from '../screens/Exam/Details';
+
+import Patient from '../screens/Patient/List';
+import ClinicalRecord from '../screens/ClinicalRecord/List';
 
 const Stack = createStackNavigator();
 
 export default () => (
   <Stack.Navigator screenOptions={{headerShown: false}}>
-    <Stack.Screen name="Exam" component={Exam} />
-    <Stack.Screen name="ExamDetails" component={ExamDetails} />
+    <Stack.Screen name="Patient" component={Patient} />
   </Stack.Navigator>
 );

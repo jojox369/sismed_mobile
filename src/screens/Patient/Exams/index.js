@@ -19,7 +19,7 @@ import EmptyDataCard from '../../../components/EmptyDataCard';
 import Card from '../../../components/ExamCard';
 import LoadingComponent from '../../../components/Loading';
 
-import {SearchDateFormater, AmericanDate} from '../../../pipes/pipes';
+import {SearchDateFormatter, AmericanDate} from '../../../pipes/pipes';
 
 export default ({route}) => {
   const navigation = useNavigation();
@@ -57,7 +57,7 @@ export default ({route}) => {
       setEmptyData(false);
     }
 
-    let response = await Api.getByPatienteAndColectDate(
+    let response = await Api.getByPatienteAndCollectionDate(
       'DANILO',
       AmericanDate(searchText),
     );
@@ -99,7 +99,7 @@ export default ({route}) => {
               placeholder="Digite a data de coleta"
               placeholderTextColor="#000000"
               value={searchText}
-              onChangeText={(t) => setSearchText(SearchDateFormater(t))}
+              onChangeText={(t) => setSearchText(SearchDateFormatter(t))}
               keyboardType="number-pad"
             />
             <SearchButton onPress={search}>

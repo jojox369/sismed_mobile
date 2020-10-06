@@ -29,7 +29,7 @@ export default {
       },
     });
     if (req.status == 200) {
-      return await req.json();
+      return req.json();
     } else {
       return 'error';
     }
@@ -52,7 +52,7 @@ export default {
     }
   },
 
-  getByPatienteAndColectDate: async (patientName, colectDate) => {
+  getByPatienteAndCollectionDate: async (patientName, collectionDate) => {
     const token = await AsyncStorage.getItem('token');
     const req = await fetch(
       `${BASE_API}exames/paciente/${patientName}/dataColeta/${colectDate}`,
@@ -64,6 +64,23 @@ export default {
         },
       },
     );
+
+    if (req.status == 200) {
+      return await req.json();
+    } else {
+      return 'error';
+    }
+  },
+
+  getByCollectionDate: async (colectDate) => {
+    const token = await AsyncStorage.getItem('token');
+    const req = await fetch(`${BASE_API}exames/dataColeta/${colectDate}`, {
+      method: 'GET',
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (req.status == 200) {
       return await req.json();

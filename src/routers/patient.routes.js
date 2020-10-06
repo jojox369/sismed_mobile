@@ -2,7 +2,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import Patient from '../screens/Patient/List';
-import ClinicalRecord from '../screens/ClinicalRecord/List';
+import ClinicalRecord from './clinical.records.routes';
 import PatientDetails from '../screens/Patient/Details';
 import PatientExams from '../screens/Patient/Exams';
 import ExamDetails from '../screens/Exam/Details';

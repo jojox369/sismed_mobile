@@ -14,8 +14,8 @@ import {
 } from './styles';
 import SearchIcon from '../../../assets/icons/search.svg';
 import {SearchIconColor} from '../../../assets/styles';
-import LoadingComponent from '../../../components/Loading';
 import Card from '../../../components/PatientCard';
+import LoadingComponent from '../../../components/Loading';
 import EmptyDataCard from '../../../components/EmptyDataCard';
 
 import Api from '../../../services/patient';
