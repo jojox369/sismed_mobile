@@ -65,6 +65,9 @@ export default () => {
   };
 
   const onRefresh = () => {
+    if (emptyData) {
+      setEmptyData(false);
+    }
     setRefreshing(false);
     getData();
     setSearchText();

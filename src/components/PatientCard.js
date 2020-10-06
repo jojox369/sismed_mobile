@@ -19,10 +19,12 @@ const NameText = styled.Text`
 `;
 const CellText = styled.Text`
   font-size: 13px;
+  font-weight: bold;
   margin-top: 10px;
 `;
 const CpfText = styled.Text`
   font-size: 13px;
+  font-weight: bold;
   margin-top: 10px;
 `;
 
@@ -45,8 +47,8 @@ export default ({data, onPress}) => {
   return (
     <Area onPress={onPress}>
       <NameText>{data.nome}</NameText>
-      <CellText>{Cell(data.celular)}</CellText>
-      <CpfText>{CPF(data.cpf)}</CpfText>
+      <CellText>Celular: {Cell(data.celular)}</CellText>
+      <CpfText>CPF: {CPF(data.cpf)}</CpfText>
       <SeeDetails>
         <SeeDetailsText>Ver Paciente</SeeDetailsText>
       </SeeDetails>

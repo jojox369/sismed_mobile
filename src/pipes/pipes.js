@@ -43,3 +43,8 @@ export const SearchDateFormater = (value) => {
     .replace(/(\d{2})(\d)/, '$1/$2')
     .replace(/(-\d{2})\d+?$/, '$1');
 };
+
+export const AmericanDate = (value) => {
+  const date = value.split('/');
+  return date[2] + '-' + date[1] + '-' + date[0];
+};

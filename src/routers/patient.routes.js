@@ -9,9 +9,7 @@ import ExamDetails from '../screens/Exam/Details';
 const Stack = createStackNavigator();
 
 export default () => (
-  <Stack.Navigator
-    screenOptions={{headerShown: false}}
-    initialRouteName="PatientExams">
+  <Stack.Navigator screenOptions={{headerShown: false}}>
     <Stack.Screen name="Patient" component={Patient} />
     <Stack.Screen name="ClinicalRecord" component={ClinicalRecord} />
     <Stack.Screen name="PatientDetails" component={PatientDetails} />

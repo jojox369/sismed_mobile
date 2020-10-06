@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {RefreshControl} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {
   Container,
@@ -18,11 +19,11 @@ import EmptyDataCard from '../../../components/EmptyDataCard';
 import Card from '../../../components/ExamCard';
 import LoadingComponent from '../../../components/Loading';
 
-import {SearchDateFormater} from '../../../pipes/pipes';
+import {SearchDateFormater, AmericanDate} from '../../../pipes/pipes';
 
 export default ({route}) => {
   const navigation = useNavigation();
-  //const {name} = route.params;
+  const {name} = route.params;
   const [loading, setloading] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [refreshing, setRefreshing] = useState(false);
@@ -31,7 +32,7 @@ export default ({route}) => {
 
   const getData = async () => {
     setloading(true);
-    let response = await Api.getByPatient('DANILO');
+    let response = await Api.getByPatient(name);
     if (response != 'error') {
       if (Object.keys(response).length === 0) {
         setloading(false);
@@ -50,28 +51,36 @@ export default ({route}) => {
     getData();
   }, []);
 
-  const changeText = (t) => {};
-
   const search = async () => {
-    /*setLoading(true);
+    setloading(true);
     if (emptyData) {
       setEmptyData(false);
     }
-    let response = await Api.getByProntuario(searchText);
+
+    let response = await Api.getByPatienteAndColectDate(
+      'DANILO',
+      AmericanDate(searchText),
+    );
 
     if (response != 'error') {
       if (Object.keys(response).length === 0) {
-        setLoading(false);
+        setloading(false);
         setEmptyData(true);
         setList(response);
       } else {
-        setLoading(false);
+        setloading(false);
         setList(response);
       }
-    } else {
-      alert('Erro ao tentar recuperar dados');
-      setLoading(false);
-    }*/
+    }
+  };
+
+  const onRefresh = () => {
+    if (emptyData) {
+      setEmptyData(false);
+    }
+    setRefreshing(false);
+    getData();
+    setSearchText();
   };
 
   function handleClick(id) {
@@ -81,7 +90,10 @@ export default ({route}) => {
   return (
     <Container>
       {!loading && (
-        <Scroller>
+        <Scroller
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
           <SearchArea>
             <SearchInput
               placeholder="Digite a data de coleta"
