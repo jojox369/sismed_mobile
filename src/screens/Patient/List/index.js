@@ -77,9 +77,9 @@ export default () => {
     getData();
   }, []);
 
-  function handleClick(id) {
+  const handleClick = (id) => {
     navigation.navigate('PatientDetails', {id});
-  }
+  };
 
   return (
     <Container>

@@ -29,24 +29,21 @@ import {
 export default ({route}) => {
   const navigation = useNavigation();
   const [patient, setPatient] = useState({});
-  const [loading, setloading] = useState(false);
-  const [cpf, setCpf] = useState();
-  const [cell, setCell] = useState();
-  const [birthday, setBirthday] = useState();
+  const [loading, setLoading] = useState(false);
   const {id} = route.params;
 
   const getData = async () => {
-    setloading(true);
+    setLoading(true);
     let response = await Api.getById(id);
 
     if (response != 'error') {
-      setloading(false);
+      setLoading(false);
+      response.cpf = CPF(response.cpf);
+      response.celular = Cell(response.celular);
+      response.data_nascimento = BrazilianDate(response.data_nascimento);
       setPatient(response);
-      setCpf(CPF(response.cpf));
-      setCell(Cell(response.celular));
-      setBirthday(BrazilianDate(response.data_nascimento));
     } else {
-      setloading(false);
+      setLoading(false);
       alert('Erro ao carregar as informações');
     }
   };
@@ -74,17 +71,17 @@ export default ({route}) => {
 
             <FieldArea>
               <LabelComponent label="CPF" />
-              <InputDetails Icon={CpfIcon} data={cpf} />
+              <InputDetails Icon={CpfIcon} data={patient.cpf} />
             </FieldArea>
 
             <FieldArea>
               <LabelComponent label="Celular" />
-              <InputDetails Icon={CellIcon} data={cell} />
+              <InputDetails Icon={CellIcon} data={patient.celular} />
             </FieldArea>
 
             <FieldArea>
               <LabelComponent label="Data de Nascimento" />
-              <InputDetails Icon={AgeIcon} data={birthday} />
+              <InputDetails Icon={AgeIcon} data={patient.data_nascimento} />
             </FieldArea>
             <ButtonsArea>
               <ExamsButton

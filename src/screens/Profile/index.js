@@ -7,9 +7,14 @@ import {useNavigation} from '@react-navigation/native';
 export default () => {
   const navigation = useNavigation();
 
+  const logout = async () => {
+    await AsyncStorage.removeItem('token');
+    navigation.navigate('PreLoad');
+  };
+
   useEffect(() => {
-    AsyncStorage.removeItem('token');
-  });
+    logout();
+  }, []);
 
   return (
     <Container>

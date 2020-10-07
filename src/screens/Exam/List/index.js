@@ -28,7 +28,7 @@ export default () => {
   const [list, setList] = useState([]);
   const [emptyData, setEmptyData] = useState(false);
 
-  const getdata = async () => {
+  const getData = async () => {
     setLoading(true);
     let response = await Api.getAll();
 
@@ -71,7 +71,7 @@ export default () => {
   };
 
   useEffect(() => {
-    getdata();
+    getData();
   }, []);
 
   const handleClick = (id) => {

@@ -14,7 +14,7 @@ import {
   Container,
   HeaderArea,
   IconArea,
-  PatientName,
+  ExamName,
   DetailsArea,
   FieldArea,
   Scroller,
@@ -70,7 +70,7 @@ export default ({route}) => {
               <ExamIcon width="100" height="100" fill="#000000" />
             </IconArea>
 
-            <PatientName>{exam.nome}</PatientName>
+            <ExamName>{exam.nome}</ExamName>
           </HeaderArea>
 
           <DetailsArea>

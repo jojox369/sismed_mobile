@@ -28,7 +28,7 @@ export const IconArea = styled.View`
   border-radius: 100px;
 `;
 
-export const PatientName = styled.Text`
+export const ExamName = styled.Text`
   margin-top: 20px;
   font-weight: bold;
 `;

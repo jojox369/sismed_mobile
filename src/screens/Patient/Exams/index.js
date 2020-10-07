@@ -24,25 +24,25 @@ import {SearchDateFormatter, AmericanDate} from '../../../pipes/pipes';
 export default ({route}) => {
   const navigation = useNavigation();
   const {name} = route.params;
-  const [loading, setloading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [refreshing, setRefreshing] = useState(false);
   const [emptyData, setEmptyData] = useState(false);
   const [list, setList] = useState([]);
 
   const getData = async () => {
-    setloading(true);
+    setLoading(true);
     let response = await Api.getByPatient(name);
     if (response != 'error') {
       if (Object.keys(response).length === 0) {
-        setloading(false);
+        setLoading(false);
         setEmptyData(true);
       } else {
-        setloading(false);
+        setLoading(false);
         setList(response);
       }
     } else {
-      setloading(false);
+      setLoading(false);
       alert('Erro ao carregar as informações');
     }
   };
@@ -52,23 +52,23 @@ export default ({route}) => {
   }, []);
 
   const search = async () => {
-    setloading(true);
+    setLoading(true);
     if (emptyData) {
       setEmptyData(false);
     }
 
     let response = await Api.getByPatienteAndCollectionDate(
-      'DANILO',
+      name,
       AmericanDate(searchText),
     );
 
     if (response != 'error') {
       if (Object.keys(response).length === 0) {
-        setloading(false);
+        setLoading(false);
         setEmptyData(true);
         setList(response);
       } else {
-        setloading(false);
+        setLoading(false);
         setList(response);
       }
     }
