@@ -86,7 +86,9 @@ export default ({route}) => {
             <ButtonsArea>
               <ExamsButton
                 onPress={() => {
-                  navigation.navigate('PatientExams', {name: patient.nome});
+                  navigation.navigate('PatientExams', {
+                    name: patient.nome,
+                  });
                 }}>
                 <ExamsIcon width="25" height="25" fill="#000000" />
                 <ButtonsText>Exames</ButtonsText>
@@ -94,7 +96,10 @@ export default ({route}) => {
 
               <ClinicalRecordButton
                 onPress={() => {
-                  console.log('aqui');
+                  navigation.navigate('ClinicalRecords', {
+                    id: patient.id,
+                    name: patient.nome,
+                  });
                 }}>
                 <MedicalRecordsIcon width="25" height="25" fill="#000000" />
                 <ButtonsText> Reg.Clínicos </ButtonsText>

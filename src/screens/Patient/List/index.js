@@ -56,9 +56,14 @@ export default () => {
     let response = await Api.getAll();
 
     if (response != 'error') {
-      setLoading(false);
-
-      setList(response);
+      if (Object.keys(response).length === 0) {
+        setLoading(false);
+        setEmptyData(true);
+        setList(response);
+      } else {
+        setLoading(false);
+        setList(response);
+      }
     } else {
       alert('Erro ao tentar recuperar dados');
     }
