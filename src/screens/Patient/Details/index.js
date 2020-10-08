@@ -12,6 +12,8 @@ import AgeIcon from '../../../assets/icons/calendar.svg';
 import CellIcon from '../../../assets/icons/smartphone.svg';
 import MedicalRecordsIcon from '../../../assets/icons/medicalRecords.svg';
 import ExamsIcon from '../../../assets/icons/exam.svg';
+import {showMessage} from 'react-native-flash-message';
+import DataErrorCard from '../../../components/DataErrorCard';
 import {
   Container,
   HeaderArea,
@@ -31,6 +33,7 @@ export default ({route}) => {
   const [patient, setPatient] = useState({});
   const [loading, setLoading] = useState(false);
   const {id} = route.params;
+  const [dataError, setDataError] = useState(false);
 
   const getData = async () => {
     setLoading(true);
@@ -43,8 +46,13 @@ export default ({route}) => {
       response.data_nascimento = BrazilianDate(response.data_nascimento);
       setPatient(response);
     } else {
-      setLoading(false);
-      alert('Erro ao carregar as informações');
+      setloading(false);
+      showMessage({
+        message: 'Erro ao tentar listar',
+        type: 'danger',
+        icon: 'danger',
+      });
+      setDataError(true);
     }
   };
 
@@ -53,7 +61,13 @@ export default ({route}) => {
   }, []);
   return (
     <Container>
-      {!loading && (
+      {dataError && (
+        <DataErrorCard
+          message="Ocorreu um erro ao tentar listar as informações"
+          subMessage="Arraste para baixo para baixo para atualizar a tela"
+        />
+      )}
+      {!loading && !dataError && (
         <Scroller>
           <HeaderArea>
             <IconArea>

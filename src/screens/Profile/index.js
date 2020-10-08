@@ -1,4 +1,4 @@
-import React, {useEffect, useContext} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   Container,
   ListInfo,
@@ -10,33 +10,49 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import {UserContext} from '../../contexts/UserContext';
 import LogoutIcon from '../../assets/icons/logout.svg';
+import {showMessage} from 'react-native-flash-message';
+import LoadingComponent from '../../components/Loading';
 
 export default () => {
   const navigation = useNavigation();
   const {state} = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
 
   const logout = async () => {
+    setLoading(true);
     await AsyncStorage.removeItem('token');
-    navigation.navigate('PreLoad');
+    await AsyncStorage.removeItem('userData');
+    console.log(await AsyncStorage.getAllKeys());
+    showMessage({
+      message: 'Deslogado com sucesso',
+      type: 'success',
+      icon: 'success',
+    });
+    setTimeout(() => {
+      navigation.navigate('PreLoad');
+    }, 4000);
   };
 
   return (
     <Container>
-      <ListInfo>
-        <UserText>Usuário: {state.nome}</UserText>
-        <UserText>
-          Função:
-          {state.perfil === 2
-            ? ' Funcionário'
-            : state.perfil === 3
-            ? ' Administrador'
-            : ' Médico'}
-        </UserText>
-        <LogoutButton onPress={logout}>
-          <LogoutIcon width="25" height="25" fill="#000000" />
-          <ButtonText>Sair</ButtonText>
-        </LogoutButton>
-      </ListInfo>
+      {!loading && (
+        <ListInfo>
+          <UserText>Usuário: {state.nome}</UserText>
+          <UserText>
+            Função:
+            {state.perfil === 2
+              ? ' Funcionário'
+              : state.perfil === 3
+              ? ' Administrador'
+              : ' Médico'}
+          </UserText>
+          <LogoutButton onPress={logout}>
+            <LogoutIcon width="25" height="25" fill="#000000" />
+            <ButtonText>Sair</ButtonText>
+          </LogoutButton>
+        </ListInfo>
+      )}
+      {loading && <LoadingComponent />}
     </Container>
   );
 };

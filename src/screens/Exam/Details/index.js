@@ -10,6 +10,10 @@ import ExamIcon from '../../../assets/icons/exam.svg';
 import CalendarIcon from '../../../assets/icons/calendar.svg';
 import PhoneIcon from '../../../assets/icons/phone.svg';
 import LaboratoryIcon from '../../../assets/icons/laboratory.svg';
+
+import {showMessage} from 'react-native-flash-message';
+import DataErrorCard from '../../../components/DataErrorCard';
+
 import {
   Container,
   HeaderArea,
@@ -24,6 +28,7 @@ export default ({route}) => {
   const [exam, setExam] = useState({});
   const [laboratory, setLaboratory] = useState({});
   const {id} = route.params;
+  const [dataError, setDataError] = useState(false);
 
   const getData = async () => {
     setloading(true);
@@ -53,7 +58,12 @@ export default ({route}) => {
       }
     } else {
       setloading(false);
-      alert('Erro ao carregar as informações do exame');
+      showMessage({
+        message: 'Erro ao tentar listar',
+        type: 'danger',
+        icon: 'danger',
+      });
+      setDataError(true);
     }
   };
 
@@ -63,7 +73,13 @@ export default ({route}) => {
 
   return (
     <Container>
-      {!loading && (
+      {dataError && (
+        <DataErrorCard
+          message="Ocorreu um erro ao tentar listar as informações"
+          subMessage="Arraste para baixo para baixo para atualizar a tela"
+        />
+      )}
+      {!loading && !dataError && (
         <Scroller>
           <HeaderArea>
             <IconArea>

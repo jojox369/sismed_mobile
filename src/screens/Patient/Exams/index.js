@@ -21,6 +21,9 @@ import LoadingComponent from '../../../components/Loading';
 
 import {SearchDateFormatter, AmericanDate} from '../../../pipes/pipes';
 
+import {showMessage} from 'react-native-flash-message';
+import DataErrorCard from '../../../components/DataErrorCard';
+
 export default ({route}) => {
   const navigation = useNavigation();
   const {name} = route.params;
@@ -28,6 +31,7 @@ export default ({route}) => {
   const [searchText, setSearchText] = useState('');
   const [refreshing, setRefreshing] = useState(false);
   const [emptyData, setEmptyData] = useState(false);
+  const [dataError, setDataError] = useState(false);
   const [list, setList] = useState([]);
 
   const getData = async () => {
@@ -43,7 +47,12 @@ export default ({route}) => {
       }
     } else {
       setLoading(false);
-      alert('Erro ao carregar as informações');
+      showMessage({
+        message: 'Erro ao tentar listar',
+        type: 'danger',
+        icon: 'danger',
+      });
+      setDataError(true);
     }
   };
 
@@ -55,6 +64,10 @@ export default ({route}) => {
     setLoading(true);
     if (emptyData) {
       setEmptyData(false);
+    }
+
+    if (dataError) {
+      setDataError(false);
     }
 
     let response = await Api.getByPatienteAndCollectionDate(
@@ -71,12 +84,24 @@ export default ({route}) => {
         setLoading(false);
         setList(response);
       }
+    } else {
+      setLoading(false);
+      showMessage({
+        message: 'Erro ao tentar listar',
+        type: 'danger',
+        icon: 'danger',
+      });
+      setDataError(true);
+      setList([]);
     }
   };
 
   const onRefresh = () => {
     if (emptyData) {
       setEmptyData(false);
+    }
+    if (dataError) {
+      setDataError(false);
     }
     setRefreshing(false);
     getData();
@@ -106,9 +131,17 @@ export default ({route}) => {
               <SearchIcon with="24" height="24" fill={SearchIconColor} />
             </SearchButton>
           </SearchArea>
+
           {emptyData && (
             <EmptyDataCard
               message="Nenhum exame encontrado"
+              subMessage="Arraste para baixo para baixo para atualizar a tela"
+            />
+          )}
+
+          {dataError && (
+            <DataErrorCard
+              message="Ocorreu um erro ao tentar listar as informações"
               subMessage="Arraste para baixo para baixo para atualizar a tela"
             />
           )}

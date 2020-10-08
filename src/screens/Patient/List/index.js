@@ -17,6 +17,8 @@ import {SearchIconColor} from '../../../assets/styles';
 import Card from '../../../components/PatientCard';
 import LoadingComponent from '../../../components/Loading';
 import EmptyDataCard from '../../../components/EmptyDataCard';
+import {showMessage} from 'react-native-flash-message';
+import DataErrorCard from '../../../components/DataErrorCard';
 
 import Api from '../../../services/patient';
 
@@ -28,12 +30,19 @@ export default () => {
   const [list, setList] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [emptyData, setEmptyData] = useState(false);
+  const [dataError, setDataError] = useState(false);
 
   const search = async () => {
     setLoading(true);
+
     if (emptyData) {
       setEmptyData(false);
     }
+
+    if (dataError) {
+      setDataError(false);
+    }
+
     let response = await Api.getByProntuario(searchText);
 
     if (response != 'error') {
@@ -46,8 +55,14 @@ export default () => {
         setList(response);
       }
     } else {
-      alert('Erro ao tentar recuperar dados');
-      setLoading(false);
+      showMessage({
+        message: 'Erro ao tentar listar',
+        type: 'danger',
+        icon: 'danger',
+      });
+      setloading(false);
+      setDataError(true);
+      setList([]);
     }
   };
 
@@ -65,7 +80,13 @@ export default () => {
         setList(response);
       }
     } else {
-      alert('Erro ao tentar recuperar dados');
+      setLoading(false);
+      showMessage({
+        message: 'Erro ao tentar listar',
+        type: 'danger',
+        icon: 'danger',
+      });
+      setDataError(true);
     }
   };
 
@@ -73,6 +94,11 @@ export default () => {
     if (emptyData) {
       setEmptyData(false);
     }
+
+    if (dataError) {
+      setDataError(false);
+    }
+
     setRefreshing(false);
     getData();
     setSearchText();
@@ -114,6 +140,13 @@ export default () => {
           {emptyData && (
             <EmptyDataCard
               message="Nenhum paciente encontrado"
+              subMessage="Arraste para baixo para baixo para atualizar a tela"
+            />
+          )}
+
+          {dataError && (
+            <DataErrorCard
+              message="Ocorreu um erro ao tentar listar as informações"
               subMessage="Arraste para baixo para baixo para atualizar a tela"
             />
           )}

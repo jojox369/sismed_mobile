@@ -17,13 +17,10 @@ import {SearchIconColor} from '../../../assets/styles';
 import Card from '../../../components/ClinicalRecordsCard';
 import LoadingComponent from '../../../components/Loading';
 import EmptyDataCard from '../../../components/EmptyDataCard';
-
+import {showMessage} from 'react-native-flash-message';
+import DataErrorCard from '../../../components/DataErrorCard';
 import Api from '../../../services/clinicalRecords';
-import {
-  BrazilianDate,
-  SearchDateFormatter,
-  AmericanDate,
-} from '../../../pipes/pipes';
+import {BrazilianDate, SearchDateFormatter} from '../../../pipes/pipes';
 
 export default ({route}) => {
   const navigation = useNavigation();
@@ -32,12 +29,17 @@ export default ({route}) => {
   const [list, setList] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [emptyData, setEmptyData] = useState(false);
+  const [dataError, setDataError] = useState(false);
   const [searchText, setSearchText] = useState('');
 
   const search = async () => {
     setLoading(true);
     if (emptyData) {
       setEmptyData(false);
+    }
+
+    if (dataError) {
+      setDataError(false);
     }
 
     const newArray = list.filter((record) => {
@@ -74,13 +76,22 @@ export default ({route}) => {
         setList(response);
       }
     } else {
-      alert('Erro ao tentar recuperar dados');
+      setLoading(false);
+      showMessage({
+        message: 'Erro ao tentar listar',
+        type: 'danger',
+        icon: 'danger',
+      });
+      setDataError(true);
     }
   };
 
   const onRefresh = () => {
     if (emptyData) {
       setEmptyData(false);
+    }
+    if (dataError) {
+      setDataError(false);
     }
     setRefreshing(false);
     getData();
@@ -124,6 +135,13 @@ export default ({route}) => {
           {emptyData && (
             <EmptyDataCard
               message="Nenhum registro encontrado"
+              subMessage="Arraste para baixo para baixo para atualizar a tela"
+            />
+          )}
+
+          {dataError && (
+            <DataErrorCard
+              message="Ocorreu um erro ao tentar listar as informações"
               subMessage="Arraste para baixo para baixo para atualizar a tela"
             />
           )}

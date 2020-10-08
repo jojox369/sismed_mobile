@@ -19,6 +19,8 @@ import {SearchIconColor} from '../../../assets/styles';
 import Card from '../../../components/ExamCard';
 import LoadingComponent from '../../../components/Loading';
 import EmptyDataCard from '../../../components/EmptyDataCard';
+import DataErrorCard from '../../../components/EmptyDataCard';
+import {showMessage} from 'react-native-flash-message';
 
 export default () => {
   const navigation = useNavigation();
@@ -27,6 +29,7 @@ export default () => {
   const [refreshing, setRefreshing] = useState();
   const [list, setList] = useState([]);
   const [emptyData, setEmptyData] = useState(false);
+  const [dataError, setDataError] = useState(false);
 
   const getData = async () => {
     setLoading(true);
@@ -42,8 +45,13 @@ export default () => {
         setList(response);
       }
     } else {
-      alert('erro ao carregar os dados');
       setLoading(false);
+      showMessage({
+        message: 'Erro ao tentar listar',
+        type: 'danger',
+        icon: 'danger',
+      });
+      setDataError(true);
     }
   };
 
@@ -51,6 +59,10 @@ export default () => {
     setLoading(true);
     if (emptyData) {
       setEmptyData(false);
+    }
+
+    if (dataError) {
+      setDataError(false);
     }
 
     let response = await Api.getByCollectionDate(AmericanDate(searchText));
@@ -81,6 +93,9 @@ export default () => {
   const onRefresh = () => {
     if (emptyData) {
       setEmptyData(false);
+    }
+    if (dataError) {
+      setDataError(false);
     }
     setRefreshing(false);
     getData();
@@ -113,6 +128,13 @@ export default () => {
           {emptyData && (
             <EmptyDataCard
               message="Nenhum exame encontrado"
+              subMessage="Arraste para baixo para baixo para atualizar a tela"
+            />
+          )}
+
+          {dataError && (
+            <DataErrorCard
+              message="Ocorreu um erro ao tentar listar as informações"
               subMessage="Arraste para baixo para baixo para atualizar a tela"
             />
           )}
