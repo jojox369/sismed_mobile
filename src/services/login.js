@@ -15,19 +15,6 @@ export default {
     return json;
   },
 
-  forgotPassword: async (cpf) => {
-    const req = await fetch(`${BASE_API}recover/password/${cpf}`, {
-      method: 'GET',
-      headers: {
-
-        'Content-Type': 'application/json'
-      },
-
-    });
-    const json = await req.json();
-    return json;
-  },
-
   getUserDetails: async (cpf, token) => {
     const req = await fetch(`${BASE_API}funcionario/login/${cpf}`, {
       method: 'GET',

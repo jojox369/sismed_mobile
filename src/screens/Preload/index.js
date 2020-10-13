@@ -12,10 +12,12 @@ export default () => {
       const token = await AsyncStorage.getItem('token');
       if (token) {
         navigation.reset({
-          routes: [{ name: 'MainTab' }],
+          routes: [{ name: 'MainRoutes' }],
         });
       } else {
-        navigation.navigate('SignIn');
+        navigation.reset({
+          routes: [{ name: 'SignIn' }],
+        });
       }
     };
     checkToken();

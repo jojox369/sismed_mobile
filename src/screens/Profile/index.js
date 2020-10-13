@@ -22,7 +22,6 @@ export default () => {
     setLoading(true);
     await AsyncStorage.removeItem('token');
     await AsyncStorage.removeItem('userData');
-    console.log(await AsyncStorage.getAllKeys());
     showMessage({
       message: 'Deslogado com sucesso',
       type: 'success',
