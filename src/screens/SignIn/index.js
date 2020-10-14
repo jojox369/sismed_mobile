@@ -50,7 +50,7 @@ export default () => {
           });
 
           navigation.reset({
-            routes: [{name: 'MainTab'}],
+            routes: [{name: 'MainRoutes'}],
           });
         }
       } else {
