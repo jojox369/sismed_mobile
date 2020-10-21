@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import ExamApi from '../../../services/exam';
 import LaboratoryApi from '../../../services/laboratory';
+import PatientApi from '../../../services/patient';
 import InputDetails from '../../../components/InputDetails';
 import LoadingComponent from '../../../components/Loading';
 import LabelComponent from '../../../components/Label';
@@ -10,6 +11,7 @@ import ExamIcon from '../../../assets/icons/exam.svg';
 import CalendarIcon from '../../../assets/icons/calendar.svg';
 import PhoneIcon from '../../../assets/icons/phone.svg';
 import LaboratoryIcon from '../../../assets/icons/laboratory.svg';
+import PatientIcon from '../../../assets/icons/patient.svg';
 
 import {showMessage} from 'react-native-flash-message';
 import DataErrorCard from '../../../components/DataErrorCard';
@@ -27,6 +29,7 @@ export default ({route}) => {
   const [loading, setloading] = useState(false);
   const [exam, setExam] = useState({});
   const [laboratory, setLaboratory] = useState({});
+  const [patient, setPatient] = useState({});
   const {id} = route.params;
   const [dataError, setDataError] = useState(false);
 
@@ -51,9 +54,26 @@ export default ({route}) => {
           laboratoryResponse.telefone_fixo,
         );
         setLaboratory(laboratoryResponse);
+      } else {
+        showMessage({
+          message: 'Erro ao carregar as informações do laboratorio',
+          type: 'danger',
+          icon: 'danger',
+        });
+        setloading(false);
+      }
+
+      let patientResponse = await PatientApi.getById(examResponse.paciente);
+
+      if (patientResponse != 'error') {
+        setPatient(patientResponse);
         setloading(false);
       } else {
-        alert('erro ao carregar informações do laboratorio');
+        showMessage({
+          message: 'Erro ao carregar as informações do paciente',
+          type: 'danger',
+          icon: 'danger',
+        });
         setloading(false);
       }
     } else {
@@ -88,8 +108,11 @@ export default ({route}) => {
 
             <ExamName>{exam.nome}</ExamName>
           </HeaderArea>
-
           <DetailsArea>
+            <FieldArea>
+              <LabelComponent label="Paciente" />
+              <InputDetails Icon={PatientIcon} data={patient.nome} />
+            </FieldArea>
             <FieldArea>
               <LabelComponent label="Data de Coleta" />
               <InputDetails Icon={CalendarIcon} data={exam.data_coleta} />

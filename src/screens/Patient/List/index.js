@@ -33,8 +33,6 @@ export default () => {
   const [dataError, setDataError] = useState(false);
 
   const search = async () => {
-    setLoading(true);
-
     if (emptyData) {
       setEmptyData(false);
     }
@@ -43,26 +41,36 @@ export default () => {
       setDataError(false);
     }
 
-    let response = await Api.getByProntuario(searchText);
-
-    if (response != 'error') {
-      if (Object.keys(response).length === 0) {
-        setLoading(false);
-        setEmptyData(true);
-        setList(response);
-      } else {
-        setLoading(false);
-        setList(response);
-      }
-    } else {
+    if (searchText == '') {
       showMessage({
-        message: 'Erro ao tentar listar',
-        type: 'danger',
-        icon: 'danger',
+        message: 'Digite o prontuario do paciente',
+        type: 'warning',
+        icon: 'warning',
       });
-      setloading(false);
-      setDataError(true);
-      setList([]);
+    } else {
+      setLoading(true);
+
+      let response = await Api.getByProntuario(searchText);
+
+      if (response != 'error') {
+        if (Object.keys(response).length === 0) {
+          setLoading(false);
+          setEmptyData(true);
+          setList(response);
+        } else {
+          setLoading(false);
+          setList(response);
+        }
+      } else {
+        showMessage({
+          message: 'Erro ao tentar listar',
+          type: 'danger',
+          icon: 'danger',
+        });
+        setLoading(false);
+        setDataError(true);
+        setList([]);
+      }
     }
   };
 
