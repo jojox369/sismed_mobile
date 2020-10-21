@@ -14,6 +14,8 @@ import MedicalRecordsIcon from '../../../assets/icons/medicalRecords.svg';
 import ExamsIcon from '../../../assets/icons/exam.svg';
 import {showMessage} from 'react-native-flash-message';
 import DataErrorCard from '../../../components/DataErrorCard';
+import {ButtonIconColor} from '../../../assets/styles';
+
 import {
   Container,
   HeaderArea,
@@ -104,7 +106,7 @@ export default ({route}) => {
                     name: patient.nome,
                   });
                 }}>
-                <ExamsIcon width="25" height="25" fill="#000000" />
+                <ExamsIcon width="25" height="25" fill={ButtonIconColor} />
                 <ButtonsText>Exames</ButtonsText>
               </ExamsButton>
 
@@ -115,7 +117,11 @@ export default ({route}) => {
                     name: patient.nome,
                   });
                 }}>
-                <MedicalRecordsIcon width="25" height="25" fill="#000000" />
+                <MedicalRecordsIcon
+                  width="25"
+                  height="25"
+                  fill={ButtonIconColor}
+                />
                 <ButtonsText> Reg.Clínicos </ButtonsText>
               </ClinicalRecordButton>
             </ButtonsArea>

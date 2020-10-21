@@ -1,7 +1,13 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import {CardColor, TabBarColor, ButtonColor} from '../assets/styles';
+import {
+  CardColor,
+  TabBarColor,
+  ButtonColor,
+  HeaderTitleColor,
+} from '../assets/styles';
 import {BrazilianDate} from '../pipes/pipes';
+
 const Area = styled.TouchableOpacity`
   background-color: ${CardColor};
   margin-bottom: 20px;
@@ -15,6 +21,7 @@ const Area = styled.TouchableOpacity`
 const NameText = styled.Text`
   font-size: 15px;
   font-weight: bold;
+  color: ${HeaderTitleColor};
 `;
 const DescriptionText = styled.Text`
   font-size: 13px;

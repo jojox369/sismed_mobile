@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import {} from '../assets/styles';
+import {EmptyTextColor, EmptySubTextColor} from '../assets/styles';
 import BrokenHeart from '../assets/icons/brokenHeart.svg';
 
 const Container = styled.SafeAreaView`
@@ -13,11 +13,13 @@ const Container = styled.SafeAreaView`
 const MessageText = styled.Text`
   margin-top: 20px;
   font-size: 15px;
+  color: ${EmptyTextColor};
 `;
 
 const SubMessageText = styled.Text`
   margin-top: 20px;
   font-size: 13px;
+  color: ${EmptySubTextColor};
 `;
 
 export default ({message, subMessage}) => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import {} from '../assets/styles';
+import {ErrorTextColor, ErrorSubTextColor} from '../assets/styles';
 import DataError from '../assets/icons/dataError.svg';
 
 const Container = styled.SafeAreaView`
@@ -13,11 +13,13 @@ const Container = styled.SafeAreaView`
 const MessageText = styled.Text`
   margin-top: 20px;
   font-size: 15px;
+  color: ${ErrorTextColor};
 `;
 
 const SubMessageText = styled.Text`
   margin-top: 20px;
   font-size: 13px;
+  color: ${ErrorSubTextColor};
 `;
 
 export default ({message, subMessage}) => {

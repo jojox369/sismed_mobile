@@ -19,6 +19,7 @@ const TextArea = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;
+  margin-left: 5px;
 `;
 
 const DataText = styled.Text`

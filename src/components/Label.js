@@ -9,6 +9,7 @@ export const Label = styled.Text`
   margin-left: 20px;
   font-size: 14px;
   font-weight: bold;
+  color: ${LabelColor};
 `;
 
 export default ({label}) => {

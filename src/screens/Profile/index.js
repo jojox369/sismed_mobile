@@ -12,6 +12,7 @@ import {UserContext} from '../../contexts/UserContext';
 import LogoutIcon from '../../assets/icons/logout.svg';
 import {showMessage} from 'react-native-flash-message';
 import LoadingComponent from '../../components/Loading';
+import {ButtonIconColor} from '../../assets/styles';
 
 export default () => {
   const navigation = useNavigation();
@@ -46,7 +47,7 @@ export default () => {
               : ' Médico'}
           </UserText>
           <LogoutButton onPress={logout}>
-            <LogoutIcon width="25" height="25" fill="#000000" />
+            <LogoutIcon width="25" height="25" fill={ButtonIconColor} />
             <ButtonText>Sair</ButtonText>
           </LogoutButton>
         </ListInfo>

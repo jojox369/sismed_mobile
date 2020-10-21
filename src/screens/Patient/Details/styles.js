@@ -1,5 +1,10 @@
 import styled from 'styled-components/native';
-import {ScreenColor, ButtonColor} from '../../../assets/styles';
+import {
+  ScreenColor,
+  ButtonColor,
+  HeaderTitleColor,
+  ButtonTextColor,
+} from '../../../assets/styles';
 
 export const Scroller = styled.ScrollView`
   flex: 1;
@@ -30,6 +35,7 @@ export const IconArea = styled.View`
 export const PatientName = styled.Text`
   margin-top: 20px;
   font-weight: bold;
+  color: ${HeaderTitleColor};
 `;
 
 export const DetailsArea = styled.View`
@@ -73,4 +79,5 @@ export const ClinicalRecordButton = styled.TouchableOpacity`
 export const ButtonsText = styled.Text`
   font-size: 13px;
   font-weight: bold;
+  color: ${ButtonTextColor};
 `;
