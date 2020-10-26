@@ -21,7 +21,7 @@ import {UserContext} from '../../../contexts/UserContext';
 import Api from '../../../services/schedule';
 import {showMessage} from 'react-native-flash-message';
 import DataErrorCard from '../../../components/DataErrorCard';
-
+import {checkState} from '../../../assets/functions';
 import {
   BrazilianDate,
   AmericanDate,
@@ -40,8 +40,6 @@ export default () => {
   const [dataError, setDataError] = useState(false);
 
   const search = async () => {
-    setLoading(true);
-
     if (emptyData) {
       setEmptyData(false);
     }
@@ -49,30 +47,42 @@ export default () => {
     if (dataError) {
       setDataError(false);
     }
-    let response = await Api.getAll(state.id, AmericanDate(searchText));
+    if (searchText == '') {
+      setEmptyData(!checkState(list));
 
-    if (response != 'error') {
-      if (Object.keys(response).length === 0) {
-        setLoading(false);
-        setEmptyData(true);
-        setList(response);
+      showMessage({
+        message: 'Informe a data do agendamento',
+        type: 'warning',
+        icon: 'warning',
+      });
+    } else {
+      setLoading(true);
+
+      let response = await Api.getAll(state.id, AmericanDate(searchText));
+
+      if (response != 'error') {
+        if (Object.keys(response).length === 0) {
+          setLoading(false);
+          setEmptyData(true);
+          setList(response);
+        } else {
+          response.forEach((scheduling) => {
+            const time = scheduling.hora.split(':', 2);
+            scheduling.hora = time[0] + ':' + time[1];
+          });
+          setLoading(false);
+          setList(response);
+        }
       } else {
-        response.forEach((scheduling) => {
-          const time = scheduling.hora.split(':', 2);
-          scheduling.hora = time[0] + ':' + time[1];
+        showMessage({
+          message: 'Erro ao tentar listar',
+          type: 'danger',
+          icon: 'danger',
         });
         setLoading(false);
-        setList(response);
+        setDataError(true);
+        setList([]);
       }
-    } else {
-      showMessage({
-        message: 'Erro ao tentar listar',
-        type: 'danger',
-        icon: 'danger',
-      });
-      setloading(false);
-      setDataError(true);
-      setList([]);
     }
   };
 
@@ -111,7 +121,7 @@ export default () => {
         type: 'danger',
         icon: 'danger',
       });
-      setloading(false);
+      setLoading(false);
       setDataError(true);
       setList([]);
     }

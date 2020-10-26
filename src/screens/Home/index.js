@@ -1,5 +1,4 @@
-import React, {useContext} from 'react';
-import {UserContext} from '../../contexts/UserContext';
+import React from 'react';
 import {Container, HeaderArea, HeaderTitle} from './styles';
 import SismedIcon from '../../assets/icons/sismed.svg';
 export default () => {

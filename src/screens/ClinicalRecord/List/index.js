@@ -21,6 +21,7 @@ import {showMessage} from 'react-native-flash-message';
 import DataErrorCard from '../../../components/DataErrorCard';
 import Api from '../../../services/clinicalRecords';
 import {BrazilianDate, SearchDateFormatter} from '../../../pipes/pipes';
+import {checkState} from '../../../assets/functions';
 
 export default ({route}) => {
   const navigation = useNavigation();
@@ -33,7 +34,6 @@ export default ({route}) => {
   const [searchText, setSearchText] = useState('');
 
   const search = async () => {
-    setLoading(true);
     if (emptyData) {
       setEmptyData(false);
     }
@@ -42,17 +42,29 @@ export default ({route}) => {
       setDataError(false);
     }
 
-    const newArray = list.filter((record) => {
-      return record.data == searchText;
-    });
-
-    if (newArray.length === 0) {
-      setEmptyData(true);
-      setLoading(false);
-      setList([]);
+    if (searchText == '') {
+      setEmptyData(!checkState(list));
+      showMessage({
+        message: 'Digite a data do registro',
+        type: 'warning',
+        icon: 'warning',
+      });
+      getData();
     } else {
-      setList(newArray);
-      setLoading(false);
+      setLoading(true);
+
+      const newArray = list.filter((record) => {
+        return record.data == searchText;
+      });
+
+      if (newArray.length === 0) {
+        setEmptyData(true);
+        setLoading(false);
+        setList([]);
+      } else {
+        setList(newArray);
+        setLoading(false);
+      }
     }
   };
 

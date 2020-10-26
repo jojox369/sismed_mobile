@@ -21,6 +21,7 @@ import LoadingComponent from '../../../components/Loading';
 import EmptyDataCard from '../../../components/EmptyDataCard';
 import DataErrorCard from '../../../components/EmptyDataCard';
 import {showMessage} from 'react-native-flash-message';
+import {checkState} from '../../../assets/functions';
 
 export default () => {
   const navigation = useNavigation();
@@ -56,7 +57,6 @@ export default () => {
   };
 
   const search = async () => {
-    setLoading(true);
     if (emptyData) {
       setEmptyData(false);
     }
@@ -65,20 +65,37 @@ export default () => {
       setDataError(false);
     }
 
-    let response = await Api.getByCollectionDate(AmericanDate(searchText));
-
-    if (response !== 'error') {
-      if (Object.keys(response).length === 0) {
-        setLoading(false);
-        setEmptyData(true);
-        setList(response);
-      } else {
-        setLoading(false);
-        setList(response);
-      }
+    if (searchText == '') {
+      setEmptyData(!checkState(list));
+      showMessage({
+        message: 'Digite a data de coleta do exame',
+        type: 'warning',
+        icon: 'warning',
+      });
     } else {
-      alert('erro ao carregar os dados');
-      setLoading(false);
+      setLoading(true);
+
+      let response = await Api.getByCollectionDate(AmericanDate(searchText));
+
+      if (response !== 'error') {
+        if (Object.keys(response).length === 0) {
+          setLoading(false);
+          setEmptyData(true);
+          setList(response);
+        } else {
+          setLoading(false);
+          setList(response);
+        }
+      } else {
+        showMessage({
+          message: 'Erro ao tentar listar',
+          type: 'danger',
+          icon: 'danger',
+        });
+        setLoading(false);
+        setDataError(true);
+        setList([]);
+      }
     }
   };
 
@@ -99,7 +116,7 @@ export default () => {
     }
     setRefreshing(false);
     getData();
-    setSearchText();
+    setSearchText('');
   };
 
   return (

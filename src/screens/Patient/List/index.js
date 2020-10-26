@@ -19,7 +19,7 @@ import LoadingComponent from '../../../components/Loading';
 import EmptyDataCard from '../../../components/EmptyDataCard';
 import {showMessage} from 'react-native-flash-message';
 import DataErrorCard from '../../../components/DataErrorCard';
-
+import {checkState} from '../../../assets/functions';
 import Api from '../../../services/patient';
 
 export default () => {
@@ -42,6 +42,7 @@ export default () => {
     }
 
     if (searchText == '') {
+      setEmptyData(!checkState(list));
       showMessage({
         message: 'Digite o prontuario do paciente',
         type: 'warning',

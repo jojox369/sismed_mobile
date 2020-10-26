@@ -61,7 +61,6 @@ export default ({route}) => {
   }, []);
 
   const search = async () => {
-    setLoading(true);
     if (emptyData) {
       setEmptyData(false);
     }
@@ -70,29 +69,39 @@ export default ({route}) => {
       setDataError(false);
     }
 
-    let response = await Api.getByPatienteAndCollectionDate(
-      name,
-      AmericanDate(searchText),
-    );
+    if (searchText == '') {
+      showMessage({
+        message: 'Digite a data de coleta do exame',
+        type: 'warning',
+        icon: 'warning',
+      });
+    } else {
+      setLoading(true);
 
-    if (response != 'error') {
-      if (Object.keys(response).length === 0) {
-        setLoading(false);
-        setEmptyData(true);
-        setList(response);
+      let response = await Api.getByPatienteAndCollectionDate(
+        name,
+        AmericanDate(searchText),
+      );
+
+      if (response != 'error') {
+        if (Object.keys(response).length === 0) {
+          setLoading(false);
+          setEmptyData(true);
+          setList(response);
+        } else {
+          setLoading(false);
+          setList(response);
+        }
       } else {
         setLoading(false);
-        setList(response);
+        showMessage({
+          message: 'Erro ao tentar listar',
+          type: 'danger',
+          icon: 'danger',
+        });
+        setDataError(true);
+        setList([]);
       }
-    } else {
-      setLoading(false);
-      showMessage({
-        message: 'Erro ao tentar listar',
-        type: 'danger',
-        icon: 'danger',
-      });
-      setDataError(true);
-      setList([]);
     }
   };
 

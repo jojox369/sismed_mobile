@@ -10,7 +10,7 @@ export const TabBarColor = '#1b3d4e';
 
 export const HeaderTitleColor = '#ffffff';
 
-export const SearchIconColor = '#ffffff';
+export const SearchIconColor = '#000000';
 
 export const LoadingIconColor = '#ffffff';
 
