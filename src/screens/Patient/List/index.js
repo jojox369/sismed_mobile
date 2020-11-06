@@ -11,8 +11,10 @@ import {
   SearchArea,
   SearchInput,
   ListArea,
+  ChooseField,
 } from './styles';
 import SearchIcon from '../../../assets/icons/search.svg';
+import ChooseFieldIcon from '../../../assets/icons/chooseField.svg';
 import {SearchIconColor} from '../../../assets/styles';
 import Card from '../../../components/PatientCard';
 import LoadingComponent from '../../../components/Loading';
@@ -21,6 +23,8 @@ import {showMessage} from 'react-native-flash-message';
 import DataErrorCard from '../../../components/DataErrorCard';
 import {checkState} from '../../../assets/functions';
 import Api from '../../../services/patient';
+import Modal from '../../../components/Modal';
+import {Cell} from '../../../pipes/pipes';
 
 export default () => {
   const navigation = useNavigation();
@@ -31,6 +35,10 @@ export default () => {
   const [refreshing, setRefreshing] = useState(false);
   const [emptyData, setEmptyData] = useState(false);
   const [dataError, setDataError] = useState(false);
+  const [searchField, setSearchField] = useState('nome');
+  const [searchIndex, setSearchIndex] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [options, setOptions] = useState(['nome', 'prontuario', 'celular']);
 
   const search = async () => {
     if (emptyData) {
@@ -44,14 +52,22 @@ export default () => {
     if (searchText == '') {
       setEmptyData(!checkState(list));
       showMessage({
-        message: 'Digite o prontuario do paciente',
+        message: `Digite o ${searchField} do paciente`,
         type: 'warning',
         icon: 'warning',
       });
     } else {
       setLoading(true);
 
-      let response = await Api.getByProntuario(searchText);
+      let response;
+
+      if (searchIndex === 0) {
+        response = await Api.getByName(searchText);
+      } else if (searchIndex === 1) {
+        response = await Api.getByProntuario(searchText);
+      } else {
+        response = await Api.getByCell(searchText);
+      }
 
       if (response != 'error') {
         if (Object.keys(response).length === 0) {
@@ -111,6 +127,8 @@ export default () => {
     setRefreshing(false);
     getData();
     setSearchText();
+    setSearchField('nome');
+    setSearchIndex(0);
   };
 
   useEffect(() => {
@@ -121,6 +139,15 @@ export default () => {
     navigation.navigate('PatientDetails', {id});
   };
 
+  const selectSearchField = () => {
+    setModalVisible(!modalVisible);
+  };
+
+  const changeSearchField = (option) => {
+    setSearchField(option.field);
+    setSearchIndex(option.index);
+  };
+
   return (
     <Container>
       {!loading && (
@@ -128,22 +155,32 @@ export default () => {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
+          <Modal
+            showModal={modalVisible}
+            toggle={selectSearchField}
+            options={options}
+            changeSearchField={changeSearchField}
+          />
           <HeaderArea>
             <HeaderTitle>Pacientes</HeaderTitle>
           </HeaderArea>
           <SearchArea>
             <SearchInput
-              placeholder="Digite o prontuario do paciente"
+              placeholder={`Digite o ${searchField} do paciente`}
               placeholderTextColor="#000000"
               value={searchText}
               onChangeText={(t) => {
-                setSearchText(t);
+                searchIndex === 2 ? setSearchText(Cell(t)) : setSearchText(t);
               }}
-              keyboardType="numeric"
+              keyboardType={searchIndex === 0 ? 'default' : 'numeric'}
             />
             <SearchButton onPress={search}>
               <SearchIcon with="24" height="24" fill={SearchIconColor} />
             </SearchButton>
+
+            <ChooseField onPress={selectSearchField}>
+              <ChooseFieldIcon fill={SearchIconColor} />
+            </ChooseField>
           </SearchArea>
 
           {emptyData && (

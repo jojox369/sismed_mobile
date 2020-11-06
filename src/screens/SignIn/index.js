@@ -1,8 +1,8 @@
 import React, {useContext, useState, useEffect} from 'react';
-import {BackHandler, ToastAndroid} from 'react-native'
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {UserContext} from '../../contexts/UserContext';
+import {showMessage} from 'react-native-flash-message';
 
 import {CPF, unmaskCPF} from '../../pipes/pipes';
 import {SignInput} from '../../components/SignInput';
@@ -54,10 +54,19 @@ export default () => {
           });
         }
       } else {
-        console.log('login e senha errados');
+        showMessage({
+          message: 'CPF e/ou Senha inválidos',
+          type: 'danger',
+          icon: 'danger'
+        })
+        setLoading(false);
       }
     } else {
-      alert('Preencha os campos!');
+      showMessage({
+        message: 'Preencha os campos',
+        type: 'warning',
+        icon: 'warning',
+      });
     }
   };
 

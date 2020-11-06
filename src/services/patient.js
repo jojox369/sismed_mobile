@@ -54,4 +54,38 @@ export default {
       return 'error';
     }
   },
+
+  getByName: async (name) => {
+    const token = await AsyncStorage.getItem('token');
+    const req = await fetch(`${BASE_API}pacientes/nome/${name}`, {
+      method: 'GET',
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (req.status == 200) {
+      return await req.json();
+    } else {
+      return 'error';
+    }
+  },
+
+  getByCell: async (cell) => {
+    const token = await AsyncStorage.getItem('token');
+    const req = await fetch(`${BASE_API}pacientes/celular/${cell}`, {
+      method: 'GET',
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (req.status == 200) {
+      return await req.json();
+    } else {
+      return 'error';
+    }
+  },
 };
