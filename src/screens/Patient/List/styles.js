@@ -32,6 +32,7 @@ export const SearchArea = styled.View`
   border-radius: 30px;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   padding-left: 20px;
   padding-right: 20px;
   margin-top: 30px;
@@ -50,4 +51,10 @@ export const SearchButton = styled.TouchableOpacity`
 export const ListArea = styled.View`
   margin-top: 30px;
   margin-bottom: 30px;
+`;
+
+export const ChooseField = styled.TouchableOpacity`
+  width: 24px;
+  height: 24px;
+  margin-left: 10px;
 `;
