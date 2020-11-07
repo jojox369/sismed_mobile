@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import {CardColor, TabBarColor, ButtonColor} from '../assets/styles';
+import {BrazilianDate} from '../pipes/pipes';
 
 const Area = styled.TouchableOpacity`
   background-color: ${CardColor};
@@ -26,6 +27,17 @@ const ProceedingText = styled.Text`
   font-weight: bold;
   margin-top: 10px;
 `;
+const HealthPlan = styled.Text`
+  font-size: 13px;
+  font-weight: bold;
+  margin-top: 10px;
+`;
+
+const DataText = styled.Text`
+  font-size: 13px;
+  font-weight: bold;
+  margin-top: 10px;
+`;
 
 const SeeDetails = styled.View`
   width: 120px;
@@ -46,8 +58,22 @@ export default ({data, onPress}) => {
   return (
     <Area onPress={onPress}>
       <NameText>{data.paciente.nome}</NameText>
-      <SchedulingText>{data.hora}</SchedulingText>
-      <ProceedingText>{data.procedimento.descricao}</ProceedingText>
+      <DataText>Data: {BrazilianDate(data.data)}</DataText>
+      <SchedulingText>Hora: {data.hora}</SchedulingText>
+      <HealthPlan>
+        Convenio:
+        {`${
+          data.tipo_convenio.nome === 'PARTICULAR'
+            ? ' ' + data.tipo_convenio.convenio.nome
+            : ' ' +
+              data.tipo_convenio.convenio.nome +
+              ' - ' +
+              data.tipo_convenio.nome
+        }`}
+      </HealthPlan>
+      <ProceedingText>
+        Procedimento: {data.procedimento.descricao}
+      </ProceedingText>
       <SeeDetails>
         <SeeDetailsText>Ver Agendamento</SeeDetailsText>
       </SeeDetails>

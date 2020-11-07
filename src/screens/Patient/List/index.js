@@ -30,15 +30,15 @@ export default () => {
   const navigation = useNavigation();
 
   const [searchText, setSearchText] = useState('');
+  const [searchField, setSearchField] = useState('nome');
+  const [searchIndex, setSearchIndex] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [options, setOptions] = useState(['nome', 'prontuario', 'celular']);
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [emptyData, setEmptyData] = useState(false);
   const [dataError, setDataError] = useState(false);
-  const [searchField, setSearchField] = useState('nome');
-  const [searchIndex, setSearchIndex] = useState(0);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [options, setOptions] = useState(['nome', 'prontuario', 'celular']);
 
   const search = async () => {
     if (emptyData) {
@@ -139,13 +139,10 @@ export default () => {
     navigation.navigate('PatientDetails', {id});
   };
 
-  const selectSearchField = () => {
-    setModalVisible(!modalVisible);
-  };
-
   const changeSearchField = (option) => {
     setSearchField(option.field);
     setSearchIndex(option.index);
+    setSearchText('');
   };
 
   return (
@@ -157,7 +154,7 @@ export default () => {
           }>
           <Modal
             showModal={modalVisible}
-            toggle={selectSearchField}
+            toggle={() => setModalVisible(!modalVisible)}
             options={options}
             changeSearchField={changeSearchField}
           />
@@ -178,7 +175,7 @@ export default () => {
               <SearchIcon with="24" height="24" fill={SearchIconColor} />
             </SearchButton>
 
-            <ChooseField onPress={selectSearchField}>
+            <ChooseField onPress={() => setModalVisible(!modalVisible)}>
               <ChooseFieldIcon fill={SearchIconColor} />
             </ChooseField>
           </SearchArea>

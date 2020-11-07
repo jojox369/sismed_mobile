@@ -19,14 +19,19 @@ export const ListInfo = styled.View`
 `;
 
 export const UserText = styled.Text`
-  margin-top: 15px;
   font-size: 17px;
   font-weight: bold;
-  color: ${HeaderTitleColor};
+  color: #000;
+  background-color: #fff;
+  width: 350px;
+  height: 30px;
+  border-radius: 20px;
+  padding-left: 10px;
+  padding-top: 2px;
 `;
 
 export const LogoutButton = styled.TouchableOpacity`
-  margin-top: 20px;
+  margin-top: 30px;
   border: 2px solid ${ButtonColor};
   width: 100px;
   height: 40px;
@@ -40,4 +45,15 @@ export const ButtonText = styled.Text`
   font-weight: bold;
   font-size: 14px;
   color: ${ButtonTextColor};
+`;
+
+export const UserTextArea = styled.View`
+  margin-top: 30px;
+`;
+
+export const Label = styled.Text`
+  font-size: 17px;
+  font-weight: bold;
+  margin-left: 10px;
+  color: ${HeaderTitleColor};
 `;

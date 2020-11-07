@@ -5,6 +5,8 @@ import {
   UserText,
   LogoutButton,
   ButtonText,
+  UserTextArea,
+  Label,
 } from './styles';
 import AsyncStorage from '@react-native-community/async-storage';
 import {useNavigation} from '@react-navigation/native';
@@ -37,15 +39,22 @@ export default () => {
     <Container>
       {!loading && (
         <ListInfo>
-          <UserText>Usuário: {state.nome}</UserText>
-          <UserText>
-            Função:
-            {state.perfil === 2
-              ? ' Funcionário'
-              : state.perfil === 3
-              ? ' Administrador'
-              : ' Médico'}
-          </UserText>
+          <UserTextArea>
+            <Label>Usuário:</Label>
+            <UserText>MARCOS AURÉLIO DOS SANTOS SILVA</UserText>
+          </UserTextArea>
+
+          <UserTextArea>
+            <Label>Função:</Label>
+            <UserText>
+              {state.perfil === 2
+                ? ' Funcionário'
+                : state.perfil === 3
+                ? ' Administrador'
+                : ' Médico'}
+            </UserText>
+          </UserTextArea>
+
           <LogoutButton onPress={logout}>
             <LogoutIcon width="25" height="25" fill={ButtonIconColor} />
             <ButtonText>Sair</ButtonText>

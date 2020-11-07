@@ -51,3 +51,9 @@ export const ListArea = styled.View`
   margin-top: 30px;
   margin-bottom: 30px;
 `;
+
+export const ChooseField = styled.TouchableOpacity`
+  width: 24px;
+  height: 24px;
+  margin-left: 10px;
+`;

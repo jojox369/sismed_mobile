@@ -72,6 +72,26 @@ export default {
     }
   },
 
+  getByPatientAndExamName: async (patientName, examName) => {
+    const token = await AsyncStorage.getItem('token');
+    const req = await fetch(
+      `${BASE_API}exames/paciente/${patientName}/exame/${examName}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: token,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    if (req.status == 200) {
+      return await req.json();
+    } else {
+      return 'error';
+    }
+  },
+
   getByCollectionDate: async (colectDate) => {
     const token = await AsyncStorage.getItem('token');
     const req = await fetch(`${BASE_API}exames/dataColeta/${colectDate}`, {

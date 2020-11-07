@@ -9,11 +9,13 @@ import {
   SearchArea,
   SearchInput,
   ListArea,
+  ChooseField,
 } from './styles';
 import {useNavigation} from '@react-navigation/native';
 import Api from '../../../services/exam';
 import {AmericanDate, SearchDateFormatter} from '../../../pipes/pipes';
 import SearchIcon from '../../../assets/icons/search.svg';
+import ChooseFieldIcon from '../../../assets/icons/chooseField.svg';
 import {SearchIconColor} from '../../../assets/styles';
 
 import Card from '../../../components/ExamCard';
@@ -22,6 +24,7 @@ import EmptyDataCard from '../../../components/EmptyDataCard';
 import DataErrorCard from '../../../components/EmptyDataCard';
 import {showMessage} from 'react-native-flash-message';
 import {checkState} from '../../../assets/functions';
+import Modal from '../../../components/Modal';
 
 export default () => {
   const navigation = useNavigation();
@@ -31,6 +34,10 @@ export default () => {
   const [list, setList] = useState([]);
   const [emptyData, setEmptyData] = useState(false);
   const [dataError, setDataError] = useState(false);
+
+  const [searchIndex, setSearchIndex] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [options, setOptions] = useState(['paciente', 'data de coleta']);
 
   const getData = async () => {
     setLoading(true);
@@ -68,14 +75,22 @@ export default () => {
     if (searchText == '') {
       setEmptyData(!checkState(list));
       showMessage({
-        message: 'Digite a data de coleta do exame',
+        message: `Digite ${
+          searchIndex === 0 ? ' o nome do paciente' : 'a data de coleta'
+        }`,
         type: 'warning',
         icon: 'warning',
       });
     } else {
       setLoading(true);
 
-      let response = await Api.getByCollectionDate(AmericanDate(searchText));
+      let response;
+
+      if (searchIndex === 0) {
+        response = await Api.getByPatient(searchText);
+      } else {
+        response = await Api.getByCollectionDate(AmericanDate(searchText));
+      }
 
       if (response !== 'error') {
         if (Object.keys(response).length === 0) {
@@ -119,6 +134,11 @@ export default () => {
     setSearchText('');
   };
 
+  const changeSearchField = (option) => {
+    setSearchText('');
+    setSearchIndex(option.index);
+  };
+
   return (
     <Container>
       {!loading && (
@@ -126,20 +146,36 @@ export default () => {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
+          <Modal
+            showModal={modalVisible}
+            toggle={() => setModalVisible(!modalVisible)}
+            options={options}
+            changeSearchField={changeSearchField}
+          />
           <HeaderArea>
             <HeaderTitle>Exames</HeaderTitle>
           </HeaderArea>
           <SearchArea>
             <SearchInput
-              placeholder="Digite a data de coleta"
+              placeholder={`Digite ${
+                searchIndex === 0 ? 'o nome do paciente' : 'a data de coleta'
+              }`}
               placeholderTextColor="#000000"
               value={searchText}
-              onChangeText={(t) => setSearchText(SearchDateFormatter(t))}
-              keyboardType="numeric"
+              onChangeText={(t) =>
+                searchIndex === 0
+                  ? setSearchText(t)
+                  : setSearchText(SearchDateFormatter(t))
+              }
+              keyboardType={searchIndex === 0 ? 'default' : 'numeric'}
             />
             <SearchButton onPress={search}>
               <SearchIcon with="24" height="24" fill={SearchIconColor} />
             </SearchButton>
+
+            <ChooseField onPress={() => setModalVisible(!modalVisible)}>
+              <ChooseFieldIcon fill={SearchIconColor} />
+            </ChooseField>
           </SearchArea>
 
           {emptyData && (

@@ -1,7 +1,18 @@
 import React, {useEffect, useState, useContext} from 'react';
 import {RefreshControl} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-
+import SearchIcon from '../../../assets/icons/search.svg';
+import ChooseFieldIcon from '../../../assets/icons/chooseField.svg';
+import {SearchIconColor} from '../../../assets/styles';
+import Card from '../../../components/ScheduleCard';
+import LoadingComponent from '../../../components/Loading';
+import EmptyDataCard from '../../../components/EmptyDataCard';
+import {UserContext} from '../../../contexts/UserContext';
+import Api from '../../../services/schedule';
+import {showMessage} from 'react-native-flash-message';
+import DataErrorCard from '../../../components/DataErrorCard';
+import Modal from '../../../components/Modal';
+import {checkState} from '../../../assets/functions';
 import {
   Container,
   Scroller,
@@ -11,17 +22,8 @@ import {
   SearchArea,
   SearchInput,
   ListArea,
+  ChooseField,
 } from './styles';
-import SearchIcon from '../../../assets/icons/search.svg';
-import {SearchIconColor} from '../../../assets/styles';
-import Card from '../../../components/ScheduleCard';
-import LoadingComponent from '../../../components/Loading';
-import EmptyDataCard from '../../../components/EmptyDataCard';
-import {UserContext} from '../../../contexts/UserContext';
-import Api from '../../../services/schedule';
-import {showMessage} from 'react-native-flash-message';
-import DataErrorCard from '../../../components/DataErrorCard';
-import {checkState} from '../../../assets/functions';
 import {
   BrazilianDate,
   AmericanDate,
@@ -38,6 +40,10 @@ export default () => {
   const [refreshing, setRefreshing] = useState(false);
   const [emptyData, setEmptyData] = useState(false);
   const [dataError, setDataError] = useState(false);
+  const [searchIndex, setSearchIndex] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [options, setOptions] = useState(['paciente', 'data do agendamento']);
+  const [scheduleDate, setScheduleDate] = useState('');
 
   const search = async () => {
     if (emptyData) {
@@ -51,14 +57,20 @@ export default () => {
       setEmptyData(!checkState(list));
 
       showMessage({
-        message: 'Informe a data do agendamento',
+        message: `Digite ${
+          searchIndex === 0 ? 'o nome do paciente' : 'a data do agendamento'
+        }`,
         type: 'warning',
         icon: 'warning',
       });
     } else {
       setLoading(true);
-
-      let response = await Api.getAll(state.id, AmericanDate(searchText));
+      let response;
+      if (searchIndex === 0) {
+        response = await Api.getByPatient(searchText);
+      } else {
+        response = await Api.getAll(state.id, AmericanDate(searchText));
+      }
 
       if (response != 'error') {
         if (Object.keys(response).length === 0) {
@@ -99,7 +111,7 @@ export default () => {
 
   const getData = async () => {
     setLoading(true);
-    setSearchText(BrazilianDate(generateDate()));
+    setScheduleDate(BrazilianDate(generateDate()));
 
     let response = await Api.getAll(state.id, generateDate());
 
@@ -148,6 +160,11 @@ export default () => {
     navigation.navigate('ScheduleDetails', {id: id, name: name});
   };
 
+  const changeSearchField = (option) => {
+    setSearchText('');
+    setSearchIndex(option.index);
+  };
+
   return (
     <Container>
       {!loading && (
@@ -155,20 +172,38 @@ export default () => {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
+          <Modal
+            showModal={modalVisible}
+            toggle={() => setModalVisible(!modalVisible)}
+            options={options}
+            changeSearchField={changeSearchField}
+          />
           <HeaderArea>
             <HeaderTitle>Agenda</HeaderTitle>
           </HeaderArea>
           <SearchArea>
             <SearchInput
-              placeholder="Digite a data do agendamento"
+              placeholder={`Digite ${
+                searchIndex === 0
+                  ? 'o nome do paciente'
+                  : 'a data do agendamento'
+              }`}
               placeholderTextColor="#000000"
               value={searchText}
-              onChangeText={(t) => setSearchText(SearchDateFormatter(t))}
-              keyboardType="numeric"
+              onChangeText={(t) =>
+                searchIndex === 0
+                  ? setSearchText(t)
+                  : setSearchText(SearchDateFormatter(t))
+              }
+              keyboardType={searchIndex === 0 ? 'default' : 'numeric'}
             />
             <SearchButton onPress={search}>
               <SearchIcon with="24" height="24" fill={SearchIconColor} />
             </SearchButton>
+
+            <ChooseField onPress={() => setModalVisible(!modalVisible)}>
+              <ChooseFieldIcon fill={SearchIconColor} />
+            </ChooseField>
           </SearchArea>
 
           {emptyData && (

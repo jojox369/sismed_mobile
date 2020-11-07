@@ -1,11 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import {
-  CardColor,
-  TabBarColor,
-  ButtonColor,
-  HeaderTitleColor,
-} from '../assets/styles';
+import {CardColor, TabBarColor, ButtonColor} from '../assets/styles';
 import {BrazilianDate} from '../pipes/pipes';
 
 const Area = styled.TouchableOpacity`
@@ -19,15 +14,11 @@ const Area = styled.TouchableOpacity`
 `;
 
 const NameText = styled.Text`
-  font-size: 15px;
-  font-weight: bold;
-  color: ${HeaderTitleColor};
-`;
-const DescriptionText = styled.Text`
   font-size: 13px;
-  margin-top: 10px;
   font-weight: bold;
+  margin-top: 5px;
 `;
+
 const Date = styled.Text`
   font-size: 13px;
   margin-top: 10px;
@@ -50,11 +41,16 @@ const SeeDetailsText = styled.Text`
   color: ${ButtonColor};
 `;
 
+const PatientName = styled.Text`
+  font-size: 15px;
+  font-weight: bold;
+`;
+
 export default ({data, onPress}) => {
   return (
     <Area onPress={onPress}>
-      <NameText>{data.nome}</NameText>
-      <DescriptionText>{data.descricao}</DescriptionText>
+      <PatientName>{data.paciente.nome}</PatientName>
+      <NameText>Exame: {data.nome}</NameText>
       <Date>Coleta: {BrazilianDate(data.data_coleta)}</Date>
       <Date>Envio: {BrazilianDate(data.data_envio)}</Date>
       <Date>

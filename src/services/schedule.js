@@ -88,4 +88,21 @@ export default {
       return 'error';
     }
   },
+
+  getByPatient: async (patient) => {
+    const token = await AsyncStorage.getItem('token');
+
+    const req = await fetch(`${BASE_API}agendamentos/paciente/${patient}`, {
+      method: 'GET',
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (req.status == 200) {
+      return await req.json();
+    } else {
+      return 'error';
+    }
+  },
 };
