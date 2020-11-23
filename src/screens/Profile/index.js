@@ -41,7 +41,7 @@ export default () => {
         <ListInfo>
           <UserTextArea>
             <Label>Usuário:</Label>
-            <UserText>MARCOS AURÉLIO DOS SANTOS SILVA</UserText>
+            <UserText>{state.nome}</UserText>
           </UserTextArea>
 
           <UserTextArea>

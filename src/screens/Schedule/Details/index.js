@@ -7,11 +7,14 @@ import {UserContext} from '../../../contexts/UserContext';
 
 import PatientIcon from '../../../assets/icons/patient.svg';
 import SchedulingIcon from '../../../assets/icons/scheduling.svg';
+import MedicalRecordsIcon from '../../../assets/icons/medicalRecords.svg';
 import ClockIcon from '../../../assets/icons/clock.svg';
 import MedicalPrescription from '../../../assets/icons/medicalPrescription.svg';
 
 import {showMessage} from 'react-native-flash-message';
 import DataErrorCard from '../../../components/DataErrorCard';
+import {ButtonIconColor} from '../../../assets/styles/';
+import {useNavigation} from '@react-navigation/native';
 
 import {
   Container,
@@ -21,12 +24,16 @@ import {
   DetailsArea,
   FieldArea,
   Scroller,
+  ClinicalRecordButton,
+  ButtonText,
+  ButtonArea,
 } from './styles';
 
 import CalendarIcon from '../../../assets/icons/calendar.svg';
 import {BrazilianDate} from '../../../pipes/pipes';
 
 export default ({route}) => {
+  const navigation = useNavigation();
   const {id, name} = route.params;
   const {state} = useContext(UserContext);
   const [scheduling, setScheduling] = useState({});
@@ -118,6 +125,25 @@ export default ({route}) => {
                 data={scheduling.pagou === 0 ? 'Não' : 'Sim'}
               />
             </FieldArea>
+
+            {state.perfil !== 2 && (
+              <ButtonArea>
+                <ClinicalRecordButton
+                  onPress={() => {
+                    navigation.navigate('Patient', {
+                      params: {id: scheduling.paciente, name},
+                      screen: 'ClinicalRecords',
+                    });
+                  }}>
+                  <MedicalRecordsIcon
+                    width="25"
+                    height="25"
+                    fill={ButtonIconColor}
+                  />
+                  <ButtonText> Reg.Clínicos </ButtonText>
+                </ClinicalRecordButton>
+              </ButtonArea>
+            )}
           </DetailsArea>
         </Scroller>
       )}

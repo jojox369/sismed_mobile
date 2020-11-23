@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import Api from '../../../services/patient';
 import {Cell, CPF, BrazilianDate} from '../../../pipes/pipes';
@@ -15,6 +15,7 @@ import ExamsIcon from '../../../assets/icons/exam.svg';
 import {showMessage} from 'react-native-flash-message';
 import DataErrorCard from '../../../components/DataErrorCard';
 import {ButtonIconColor} from '../../../assets/styles';
+import {UserContext} from '../../../contexts/UserContext';
 
 import {
   Container,
@@ -28,6 +29,7 @@ import {
   ExamsButton,
   ClinicalRecordButton,
   ButtonsText,
+  EmployeeExamButton,
 } from './styles';
 
 export default ({route}) => {
@@ -36,6 +38,7 @@ export default ({route}) => {
   const [loading, setLoading] = useState(false);
   const {id} = route.params;
   const [dataError, setDataError] = useState(false);
+  const {state} = useContext(UserContext);
 
   const getData = async () => {
     setLoading(true);
@@ -100,30 +103,40 @@ export default ({route}) => {
               <InputDetails Icon={AgeIcon} data={patient.data_nascimento} />
             </FieldArea>
             <ButtonsArea>
-              <ExamsButton
-                onPress={() => {
-                  navigation.navigate('PatientExams', {
-                    name: patient.nome,
-                  });
-                }}>
-                <ExamsIcon width="25" height="25" fill={ButtonIconColor} />
-                <ButtonsText>Exames</ButtonsText>
-              </ExamsButton>
+              {state.perfil !== 2 && (
+                <ExamsButton
+                  onPress={() => {
+                    navigation.navigate('PatientExams', {
+                      name: patient.nome,
+                    });
+                  }}>
+                  <ExamsIcon width="25" height="25" fill={ButtonIconColor} />
+                  <ButtonsText>Exames</ButtonsText>
+                </ExamsButton>
+              )}
 
-              <ClinicalRecordButton
-                onPress={() => {
-                  navigation.navigate('ClinicalRecords', {
-                    id: patient.id,
-                    name: patient.nome,
-                  });
-                }}>
-                <MedicalRecordsIcon
-                  width="25"
-                  height="25"
-                  fill={ButtonIconColor}
-                />
-                <ButtonsText> Reg.Clínicos </ButtonsText>
-              </ClinicalRecordButton>
+              {state.perfil !== 2 && (
+                <ClinicalRecordButton
+                  onPress={() => {
+                    navigation.navigate('ClinicalRecords', {
+                      id: patient.id,
+                      name: patient.nome,
+                    });
+                  }}>
+                  <MedicalRecordsIcon
+                    width="25"
+                    height="25"
+                    fill={ButtonIconColor}
+                  />
+                  <ButtonsText> Reg.Clínicos </ButtonsText>
+                </ClinicalRecordButton>
+              )}
+              {state.perfil === 2 && (
+                <EmployeeExamButton>
+                  <ExamsIcon width="25" height="25" fill={ButtonIconColor} />
+                  <ButtonsText>Exames</ButtonsText>
+                </EmployeeExamButton>
+              )}
             </ButtonsArea>
           </DetailsArea>
         </Scroller>

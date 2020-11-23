@@ -9,10 +9,12 @@ import LoadingComponent from '../../../components/Loading';
 import EmptyDataCard from '../../../components/EmptyDataCard';
 import {UserContext} from '../../../contexts/UserContext';
 import Api from '../../../services/schedule';
+import EmployeeApi from '../../../services/employee';
 import {showMessage} from 'react-native-flash-message';
 import DataErrorCard from '../../../components/DataErrorCard';
 import Modal from '../../../components/Modal';
 import {checkState} from '../../../assets/functions';
+import RNPickerSelect from 'react-native-picker-select';
 import {
   Container,
   Scroller,
@@ -23,12 +25,10 @@ import {
   SearchInput,
   ListArea,
   ChooseField,
+  SearchEmployeeArea,
+  EmployeeInput,
 } from './styles';
-import {
-  BrazilianDate,
-  AmericanDate,
-  SearchDateFormatter,
-} from '../../../pipes/pipes';
+import {AmericanDate, SearchDateFormatter} from '../../../pipes/pipes';
 
 export default () => {
   const navigation = useNavigation();
@@ -43,7 +43,9 @@ export default () => {
   const [searchIndex, setSearchIndex] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
   const [options, setOptions] = useState(['paciente', 'data do agendamento']);
-  const [scheduleDate, setScheduleDate] = useState('');
+  const [showData, setShowData] = useState(true);
+  const [medics, setMedics] = useState([]);
+  const [medicId, setMedicId] = useState();
 
   const search = async () => {
     if (emptyData) {
@@ -111,15 +113,22 @@ export default () => {
 
   const getData = async () => {
     setLoading(true);
-    setScheduleDate(BrazilianDate(generateDate()));
 
-    let response = await Api.getAll(state.id, generateDate());
+    let response;
+
+    if (medicId) {
+      response = await Api.getAll(medicId, generateDate());
+    } else {
+      response = await Api.getAll(state.id, generateDate());
+    }
 
     if (response != 'error') {
       if (Object.keys(response).length === 0) {
         setLoading(false);
         setEmptyData(true);
+        setList([]);
       } else {
+        setShowData(true);
         setLoading(false);
         response.forEach((scheduling) => {
           const time = scheduling.hora.split(':', 2);
@@ -139,9 +148,37 @@ export default () => {
     }
   };
 
+  const getAllEmployees = async () => {
+    const request = await EmployeeApi.getAll();
+    if (request !== 'error') {
+      setMedics(
+        request.map((medic) => {
+          return {label: medic.nome, value: medic.id};
+        }),
+      );
+    } else {
+      showMessage({
+        message: 'Não foi possivel recuperar os dados dos médicos',
+        type: 'danger',
+        icon: 'danger',
+      });
+    }
+  };
+  const verifyUser = () => {
+    if (state.perfil === 2) {
+      setShowData(false);
+      getAllEmployees();
+    } else {
+      getData();
+    }
+  };
   useEffect(() => {
-    getData();
-  }, []);
+    if (medicId) {
+      getData();
+    } else {
+      verifyUser();
+    }
+  }, [medicId]);
 
   const onRefresh = () => {
     if (emptyData) {
@@ -181,30 +218,43 @@ export default () => {
           <HeaderArea>
             <HeaderTitle>Agenda</HeaderTitle>
           </HeaderArea>
-          <SearchArea>
-            <SearchInput
-              placeholder={`Digite ${
-                searchIndex === 0
-                  ? 'o nome do paciente'
-                  : 'a data do agendamento'
-              }`}
-              placeholderTextColor="#000000"
-              value={searchText}
-              onChangeText={(t) =>
-                searchIndex === 0
-                  ? setSearchText(t)
-                  : setSearchText(SearchDateFormatter(t))
-              }
-              keyboardType={searchIndex === 0 ? 'default' : 'numeric'}
-            />
-            <SearchButton onPress={search}>
-              <SearchIcon with="24" height="24" fill={SearchIconColor} />
-            </SearchButton>
 
-            <ChooseField onPress={() => setModalVisible(!modalVisible)}>
-              <ChooseFieldIcon fill={SearchIconColor} />
-            </ChooseField>
-          </SearchArea>
+          {state.perfil === 2 && (
+            <RNPickerSelect
+              onValueChange={(value) => setMedicId(value)}
+              placeholder={{label: 'Selecione o médico'}}
+              items={medics}
+              style={{...SearchEmployeeArea}}
+              useNativeAndroidPickerStyle={false}
+            />
+          )}
+
+          {showData && !emptyData && (
+            <SearchArea>
+              <SearchInput
+                placeholder={`Digite ${
+                  searchIndex === 0
+                    ? 'o nome do paciente'
+                    : 'a data do agendamento'
+                }`}
+                placeholderTextColor="#000000"
+                value={searchText}
+                onChangeText={(t) =>
+                  searchIndex === 0
+                    ? setSearchText(t)
+                    : setSearchText(SearchDateFormatter(t))
+                }
+                keyboardType={searchIndex === 0 ? 'default' : 'numeric'}
+              />
+              <SearchButton onPress={search}>
+                <SearchIcon with="24" height="24" fill={SearchIconColor} />
+              </SearchButton>
+
+              <ChooseField onPress={() => setModalVisible(!modalVisible)}>
+                <ChooseFieldIcon fill={SearchIconColor} />
+              </ChooseField>
+            </SearchArea>
+          )}
 
           {emptyData && (
             <EmptyDataCard
@@ -220,7 +270,7 @@ export default () => {
             />
           )}
 
-          {!loading && (
+          {!loading && showData && (
             <ListArea>
               {list.map((item, k) => (
                 <Card

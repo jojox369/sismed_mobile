@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import {StyleSheet} from 'react-native';
 import {
   ScreenColor,
   HeaderTitleColor,
@@ -57,3 +58,35 @@ export const ChooseField = styled.TouchableOpacity`
   height: 24px;
   margin-left: 10px;
 `;
+
+/* export const SearchEmployeeArea = styled.View`
+  background-color: ${SearchBoxColor};
+  height: 60px;
+  border-radius: 30px;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 30px;
+`; */
+
+export const EmployeeInput = styled.TextInput`
+  flex: 1;
+  font-size: 16px;
+`;
+
+export const SearchEmployeeArea = StyleSheet.create({
+  inputAndroid: {
+    fontSize: 16,
+    paddingTop: 13,
+    paddingHorizontal: 10,
+    paddingBottom: 12,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 30,
+    backgroundColor: SearchBoxColor,
+    color: 'black',
+    marginTop: 30,
+    flex: 1,
+  },
+});

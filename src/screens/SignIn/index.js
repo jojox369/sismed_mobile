@@ -57,8 +57,8 @@ export default () => {
         showMessage({
           message: 'CPF e/ou Senha inválidos',
           type: 'danger',
-          icon: 'danger'
-        })
+          icon: 'danger',
+        });
         setLoading(false);
       }
     } else {

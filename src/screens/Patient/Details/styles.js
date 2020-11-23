@@ -81,3 +81,12 @@ export const ButtonsText = styled.Text`
   font-weight: bold;
   color: ${ButtonTextColor};
 `;
+
+export const EmployeeExamButton = styled.TouchableOpacity`
+  width: 100%;
+  border: 1px solid ${ButtonColor};
+  border-radius: 20px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
